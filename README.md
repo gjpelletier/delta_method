@@ -1,6 +1,6 @@
 # delta_method
 
-Nonlinear regression using lmfit combined with using the delta method to estimate confidence intervals and prediction intervals
+**Nonlinear regression using lmfit combined with using the delta method to estimate confidence intervals and prediction intervals**
 
 by Greg Pelletier (gjpelletier@gmail.com)
 
