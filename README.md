@@ -2,7 +2,7 @@
 
 Nonlinear regression using lmfit combined with using the delta method to estimate confidence intervals and prediction intervals
 
-by Greg Pelletier (gjpelletier@gmail.com) 12/25/2023
+by Greg Pelletier (gjpelletier@gmail.com)
 
 This python script uses the python package called lmfit for nonlinear regression. We also introduce a new function using the delta method, to extend beyond the capabilities of lmfit, to estimate confidence intervals for predicted values, and prediction intervals for new data, using the nonlinear regression fit.
 
