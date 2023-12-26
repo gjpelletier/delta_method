@@ -4,7 +4,7 @@ by Greg Pelletier (gjpelletier@gmail.com)
 
 Introducing a new Python function using the delta method to estimate confidence intervals for predicted values, and prediction intervals for new data, using nonlinear regression. This new delta method function extends the capabilities of the python package lmfit to apply the delta method for confidence intervals and prediction intervals. 
 
-The lmfit package (https://lmfit.github.io/lmfit-py/) is used to find the best-fit parameter values, and the variance-covariance matrix of the model parameters. The user may specify any expression for the nonlinear regression model. The delta method function is applied next to find the confidence intervals and prediction intervals.
+The lmfit package (lmfit.github.io/lmfit-py/) is used to find the best-fit parameter values, and the variance-covariance matrix of the model parameters. The user may specify any expression for the nonlinear regression model. The delta method function (github.com/gjpelletier/delta_method) is applied next to find the confidence intervals and prediction intervals.
 
 Two examples are provided: 
 
