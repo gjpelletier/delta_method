@@ -6,11 +6,13 @@ Introducing a new Python function using the delta method to estimate confidence 
 
 The lmfit package (https://lmfit.github.io/lmfit-py/) is used to find the best-fit parameter values, and the variance-covariance matrix of the model parameters. Our new delta method function is applied next to find the confidence intervals and prediction intervals.
 
-Two examples are provided: 
+Three examples are provided: 
 
 - **delta_method_sigmoid4**: In this example we use a 4-parameter logistic function with a sigmoid shape to fit an observed data set provided in the R base package datasets, and consisting of the waiting time between eruptions and the duration of the eruption for the Old Faithful geyser in Yellowstone National Park, Wyoming, USA. This is the data set used in the example the MAP566 online lecture on nonlinear regression.
 
 - **delta_method_asympt3**: In this example we use an asymptotic 3-parameter exponential function to fit an observed data set for calcification rates of hard clams from Ries et al (2009) (https://doi.org/10.1130/G30210A.1)
+
+- **delta_method_monod2**: In this example we use a 2-parameter Monod function (Michaelis-Menten) to fit an enzymology data set (https://rforbiochemists.blogspot.com/2015/05/plotting-and-fitting-enzymology-data.html)
 
 The user may build any expression for the nonlinear relationship between observed x and y for the nonlinear regression using the ExpressionModel function of lmfit.
 
