@@ -202,7 +202,7 @@ def delta_method(COVB,param,x_new,f,x,y,alpha):
     # - - -
     return y_new, lwr_conf, upr_conf, lwr_pred, upr_pred, pvalue
 
-"""Before using the delta_method function, we first need to make a few more inputs for it as follows:"""
+"""Before using the delta_method function, we first need to make a few more inputs for it as follows (NOTE: make sure that the lambda function f below matches the ExpressionModel function defined above):"""
 
 # model lambda function to use for any param or xval
 f = lambda param,xval : (param[0]-param[3])/(1+exp(-param[1]*(xval-param[2])))+param[3]
