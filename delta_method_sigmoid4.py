@@ -75,7 +75,7 @@ y = np.array([79,54,74,62,85,55,88,85,51,85,54,84,78,47,83,52,62,84,52,79,51,47,
               75,47,86,63,85,82,57,82,67,74,54,83,73,73,88,80,71,83,56,79,78,84,58,83,
               43,60,75,81,46,90,46,74])
 
-"""We will use the ExpressionModel function of lmfit to specify the 4-parameter logistic function with a sigmoid shape that we want to fit to our data:"""
+"""We will use the ExpressionModel function of lmfit to specify the 4-parameter logistic function with a sigmoid shape that we want to fit to our data. ExpressionModel allows the user to define any function for the model as described at this link: https://lmfit.github.io/lmfit-py/builtin_models.html#user-defined-models"""
 
 mod = ExpressionModel('(A-S) / ( 1 + exp(-gamma * (x - tau)) ) + S')
 
@@ -150,6 +150,7 @@ def delta_method(COVB,param,x_new,f,x,y,alpha):
     #        'upr_conf': upper confidence interval for each value in x_new
     #        'lwr_pred': lower prediction interval for each value in x_new
     #        'upr_pred': upper prediction interval for each value in x_new
+    #        'grad_new': derivative gradients at x_new (change in f(x_new) per change in each param)
     #        'G_new': variance due to each paramter at x_new
     #        'GS_new': variance due to all parameters combined at x_new
     #        'SST': Sum of Squares Total
@@ -244,6 +245,7 @@ def delta_method(COVB,param,x_new,f,x,y,alpha):
             'upr_conf': upr_conf,
             'lwr_pred': lwr_pred,
             'upr_pred': upr_pred,
+            'grad_new': grad_new,
             'G_new': G_new,
             'GS_new': GS_new,
             'SST': SST,

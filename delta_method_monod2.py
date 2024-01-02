@@ -45,7 +45,7 @@ from lmfit.models import ExpressionModel
 x = np.array([0,1,2,5,8,12,30,50])
 y = np.array([0,11.1,25.4,44.8,54.5,58.2,72,60.1])
 
-"""We will use the ExpressionModel function of lmfit to specify the 2-parameter Monod function that we want to fit to our data:"""
+"""We will use the ExpressionModel function of lmfit to specify the 2-parameter Monod function that we want to fit to our data. ExpressionModel allows the user to define any function for the model as described at this link: https://lmfit.github.io/lmfit-py/builtin_models.html#user-defined-models"""
 
 mod = ExpressionModel('(Vm * x)/(Km + x)')
 
@@ -118,6 +118,7 @@ def delta_method(COVB,param,x_new,f,x,y,alpha):
     #        'upr_conf': upper confidence interval for each value in x_new
     #        'lwr_pred': lower prediction interval for each value in x_new
     #        'upr_pred': upper prediction interval for each value in x_new
+    #        'grad_new': derivative gradients at x_new (change in f(x_new) per change in each param)
     #        'G_new': variance due to each paramter at x_new
     #        'GS_new': variance due to all parameters combined at x_new
     #        'SST': Sum of Squares Total
@@ -212,6 +213,7 @@ def delta_method(COVB,param,x_new,f,x,y,alpha):
             'upr_conf': upr_conf,
             'lwr_pred': lwr_pred,
             'upr_pred': upr_pred,
+            'grad_new': grad_new,
             'G_new': G_new,
             'GS_new': GS_new,
             'SST': SST,

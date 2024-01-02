@@ -55,7 +55,7 @@ y = np.array([ 1.08235921e-04,  3.33033603e-05,  1.33213441e-04,  6.66067206e-05
        -1.37376361e-04, -1.24887601e-04, -6.66067206e-05, -7.90954807e-05,
        -7.07696407e-05])
 
-"""We will use the ExpressionModel function of lmfit to specify the 3-parameter asymptotic exponential function that we want to fit to our data:"""
+"""We will use the ExpressionModel function of lmfit to specify the 3-parameter asymptotic exponential function that we want to fit to our data. ExpressionModel allows the user to define any function for the model as described at this link: https://lmfit.github.io/lmfit-py/builtin_models.html#user-defined-models"""
 
 mod = ExpressionModel('b1 + b2 * exp(b3 * x)')
 
@@ -130,6 +130,7 @@ def delta_method(COVB,param,x_new,f,x,y,alpha):
     #        'upr_conf': upper confidence interval for each value in x_new
     #        'lwr_pred': lower prediction interval for each value in x_new
     #        'upr_pred': upper prediction interval for each value in x_new
+    #        'grad_new': derivative gradients at x_new (change in f(x_new) per change in each param)
     #        'G_new': variance due to each paramter at x_new
     #        'GS_new': variance due to all parameters combined at x_new
     #        'SST': Sum of Squares Total
@@ -224,6 +225,7 @@ def delta_method(COVB,param,x_new,f,x,y,alpha):
             'upr_conf': upr_conf,
             'lwr_pred': lwr_pred,
             'upr_pred': upr_pred,
+            'grad_new': grad_new,
             'G_new': G_new,
             'GS_new': GS_new,
             'SST': SST,
