@@ -1,4 +1,4 @@
-# Nonlinear regression using the delta method to estimate confidence intervals and prediction intervals in Python
+# Nonlinear regression using the delta method to estimate confidence intervals and prediction intervals in Python and Jupyter Notebooks
 
 by Greg Pelletier (gjpelletier@gmail.com)
 
