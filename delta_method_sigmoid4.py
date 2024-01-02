@@ -174,7 +174,7 @@ def delta_method(COVB,param,x_new,f,x,y,alpha):
     # - - -
     # calculate predicted y_new at each x_new
     y_new = f(param,x_new)
-    # calculate derivative gradients at x_new (change in f(x_new) per change in each param using +1ppb change in each param)
+    # calculate derivative gradients at x_new (change in f(x_new) per change in each param)
     grad_new = np.empty(shape=(np.size(x_new),np.size(param)))
     h = 1e-8       # h= small change for each param to balance truncation error and rounding error of the gradient
     for i in range(np.size(param)):
