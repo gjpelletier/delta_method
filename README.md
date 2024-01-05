@@ -18,7 +18,7 @@ Three examples are provided:
 
 The user may build any expression for the nonlinear relationship between observed x and y for the nonlinear regression using either scipy.optimize.curve_fit or the ExpressionModel function of lmfit.
 
-To estimate the confidence intervals and prediction intervals, we use a new python function that applies the delta-method. The delta-method is described in detail in Section 5.1 of this MAP566 online lecture by Julien Chiquet from Institut Polytechnique de Paris:
+To estimate the confidence intervals and prediction intervals, we use a new python function that applies the delta-method. The delta-method is described in detail in Section 5 of this MAP566 online lecture by Julien Chiquet from Institut Polytechnique de Paris:
 
 https://jchiquet.github.io/MAP566/docs/regression/map566-lecture-nonlinear-regression.html#confidence-intervals-and-prediction-intervals
 
