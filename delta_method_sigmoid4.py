@@ -470,7 +470,7 @@ def parametric_bootstrap(popt,x_new,f,f_scipy,x,y,alpha,trials):
     #        'trials': number of trials for the bootstrap Monte Carlo
     #        'x': observed x values used as input
     #        'y': observed y values used as input
-    #        'yhat': reference predicted y at observed x values using input input popt
+    #        'yhat': reference predicted y at observed x values using input popt
     #        'x_new': new x-values used as input to evaluate new predicted y_new values
     #        'y_new': reference new predicted y_new values at new x_new values using input popt
     #        'lwr_conf': lower confidence interval for each value in x_new
