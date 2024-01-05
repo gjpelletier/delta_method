@@ -463,6 +463,8 @@ def parametric_bootstrap(popt,x_new,f,f_scipy,x,y,alpha,trials):
     # dict = dictionary of output varlables with the following keys:
     #        'popt': optimum best-fit parameter values used as input
     #        'popt_b': bootstrap trials of optimum best-fit parameter values (trials x nparam)
+    #        'f_hat_b': bootstrap trials of new 'predicted' y values at each x_new (trials x n_new)
+    #        'y_hat_b': bootstrap trials of new 'observed' y values at each x_new (trials x n_new)
     #        'fstr': string of the input lambda function of the regression model
     #        'alpha': input significance level for the confidence/prediction interval (e.g. alpha=0.05 is the 95% confidence/prediction interval)
     #        'trials': number of trials for the bootstrap Monte Carlo
@@ -516,25 +518,25 @@ def parametric_bootstrap(popt,x_new,f,f_scipy,x,y,alpha,trials):
     f_new = f(beta_hat,x_new)     # reference predicted y_new at x_new
     # - - -
     # Monte Carlo simulation
-    res_f_hat = np.zeros((n_new,trials))
-    res_y_hat = np.zeros((n_new,trials))
+    res_f_hat = np.zeros((trials,n_new))
+    res_y_hat = np.zeros((trials,n_new))
     res_popt_b = np.zeros((trials,nparam))
     for i in range(trials):
         y_b = y_hat_ref + syx * stats.norm.rvs(size=nobs)
         popt_b, pcov_b = opt.curve_fit(f_scipy, x, y_b, p0=popt, bounds=(-np.inf,np.inf))
         f_b = f(popt_b, x_new)
         res_popt_b[i,:] = popt_b
-        res_f_hat[:,i] = f_b
-        res_y_hat[:,i] = f_b + stats.norm.rvs(loc=0,scale=syx,size=1)
+        res_f_hat[i,:] = f_b
+        res_y_hat[i,:] = f_b + stats.norm.rvs(loc=0,scale=syx,size=1)
     # - - -
     # Monte Carlo results summary
     # mc_x = x_new
     # mc_f = f_new
     # un-biased quantiles for confidence intervals and prediction intervals
-    mc_lwr_conf = f_new + rq * (np.quantile(res_f_hat, alpha/2, axis=1) - f_new)
-    mc_upr_conf = f_new + rq * (np.quantile(res_f_hat, 1-alpha/2, axis=1) - f_new)
-    mc_lwr_pred = f_new + rq * (np.quantile(res_y_hat, alpha/2, axis=1) - f_new)
-    mc_upr_pred = f_new + rq * (np.quantile(res_y_hat, 1-alpha/2, axis=1) - f_new)
+    mc_lwr_conf = f_new + rq * (np.quantile(res_f_hat, alpha/2, axis=0) - f_new)
+    mc_upr_conf = f_new + rq * (np.quantile(res_f_hat, 1-alpha/2, axis=0) - f_new)
+    mc_lwr_pred = f_new + rq * (np.quantile(res_y_hat, alpha/2, axis=0) - f_new)
+    mc_upr_pred = f_new + rq * (np.quantile(res_y_hat, 1-alpha/2, axis=0) - f_new)
     # - - -
     # optional additional outputs of regression statistics
     SST = np.sum(y **2) - np.sum(y) **2 / nobs  # sum of squares (total)
@@ -553,6 +555,8 @@ def parametric_bootstrap(popt,x_new,f,f_scipy,x,y,alpha,trials):
     dict = {
             'popt': popt,
             'popt_b': res_popt_b,
+            'f_hat_b': res_f_hat,
+            'y_hat_b': res_y_hat,
             'fstr': fstr,
             'alpha': alpha,
             'trials': trials,
