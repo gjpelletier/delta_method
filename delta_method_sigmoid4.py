@@ -493,6 +493,7 @@ def parametric_bootstrap(popt,x_new,f,f_scipy,x,y,alpha,trials):
     #        'adj_rsquared': adjusted squared
     import numpy as np
     from scipy import stats
+    import scipy.optimize as opt
     import inspect
     # - - -
     # calculate predicted y_new at each x_new using optimum parameters
