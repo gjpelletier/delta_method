@@ -462,6 +462,7 @@ def parametric_bootstrap(popt,x_new,f,f_scipy,x,y,alpha,trials):
     # OUTPUT
     # dict = dictionary of output varlables with the following keys:
     #        'popt': optimum best-fit parameter values used as input
+    #        'popt_b': bootstrap trials of optimum best-fit parameter values (trials x nparam)
     #        'fstr': string of the input lambda function of the regression model
     #        'alpha': input significance level for the confidence/prediction interval (e.g. alpha=0.05 is the 95% confidence/prediction interval)
     #        'trials': number of trials for the bootstrap Monte Carlo
@@ -517,10 +518,12 @@ def parametric_bootstrap(popt,x_new,f,f_scipy,x,y,alpha,trials):
     # Monte Carlo simulation
     res_f_hat = np.zeros((n_new,trials))
     res_y_hat = np.zeros((n_new,trials))
+    res_popt_b = np.zeros((trials,nparam))
     for i in range(trials):
         y_b = y_hat_ref + syx * stats.norm.rvs(size=nobs)
         popt_b, pcov_b = opt.curve_fit(f_scipy, x, y_b, p0=popt, bounds=(-np.inf,np.inf))
         f_b = f(popt_b, x_new)
+        res_popt_b[i,:] = popt_b
         res_f_hat[:,i] = f_b
         res_y_hat[:,i] = f_b + stats.norm.rvs(loc=0,scale=syx,size=1)
     # - - -
@@ -546,9 +549,10 @@ def parametric_bootstrap(popt,x_new,f,f_scipy,x,y,alpha,trials):
     # - - -
     # make a string of the lambda function f to save in the output dictionary
     fstr = str(inspect.getsourcelines(f)[0])
-    # make the dictionary of output variables from the delta-method
+    # make the dictionary of output variables
     dict = {
             'popt': popt,
+            'popt_b': res_popt_b,
             'fstr': fstr,
             'alpha': alpha,
             'trials': trials,
@@ -613,7 +617,7 @@ popt, pcov = opt.curve_fit(f_scipy, x, y, p0=p_init, bounds=(-np.inf,np.inf))
 trials = 10000   # number of trials for bootstrap Monte Carlo
 b = parametric_bootstrap(popt,x_new,f,f_scipy,x,y,alpha,trials)
 
-# extract the output values from the delta-method output dictionary
+# extract the output values from the output dictionary
 y_new = b['y_new']
 mc_lwr_conf = b['lwr_conf']
 mc_upr_conf = b['upr_conf']
