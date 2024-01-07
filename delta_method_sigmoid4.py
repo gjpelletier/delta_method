@@ -673,7 +673,7 @@ plt.ticklabel_format(style='plain', axis='y')
 """_____
 **Confidence intervals for model parameters**
 
-We will use various methods to estiate the confidence intervals for model parameters, as described in https://jchiquet.github.io/MAP566/docs/regression/map566-lecture-nonlinear-regression.html#confidence-intervals-for-the-model-parameters
+We will use various methods to estimate the confidence intervals for model parameters, as described in https://jchiquet.github.io/MAP566/docs/regression/map566-lecture-nonlinear-regression.html#confidence-intervals-for-the-model-parameters
 
 Method 1. Parametric bootstrap
 """
