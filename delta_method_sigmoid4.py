@@ -32,9 +32,7 @@ pip install lmfit
 """Next we import the necessary python packages:"""
 
 # Commented out IPython magic to ensure Python compatibility.
-# change the next line to auto istead of inline if using ipython
 # %matplotlib inline
-
 import matplotlib.pyplot as plt
 import numpy as np
 from numpy import loadtxt
