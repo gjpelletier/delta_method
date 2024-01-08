@@ -31,8 +31,6 @@ pip install lmfit
 
 """Next we import the necessary python packages:"""
 
-# Commented out IPython magic to ensure Python compatibility.
-# %matplotlib inline
 import matplotlib.pyplot as plt
 import numpy as np
 from numpy import loadtxt
@@ -322,9 +320,9 @@ plt.plot(x, y, '.', label='observations')
 # observations
 plt.plot(x_new, y_new, '-', label='best fit (lmfit)')
 # 95% prediction interval (PI) using the delta method
-plt.fill_between(x_new, lwr_pred, upr_pred,color="#d3d3d3", label='95% PI (delta method)')
+plt.fill_between(x_new, lwr_pred, upr_pred,color="#d3d3d3", label=str(int(100*(1-alpha)))+'% PI (delta method)')
 # 95% confidence interval (CI) using the delta method
-plt.fill_between(x_new, lwr_conf, upr_conf,color="#ABABAB", label='95% CI (delta method)')
+plt.fill_between(x_new, lwr_conf, upr_conf,color="#ABABAB", label=str(int(100*(1-alpha)))+'% CI (delta method)')
 plt.legend(loc='lower right')
 plt.title('Delta-method using lmfit for parameters and covariance')
 plt.xlabel('x= eruption length (min)')
@@ -416,9 +414,9 @@ plt.plot(x, y, '.', label='observations')
 # plt.plot(x_new, y_new, '--k', label='best-fit (lmfit)',linewidth=4)    # lmfit solution of best fit
 plt.plot(x_new, y_new, '-', label='best-fit (scipy)')     # scipy solution of best fit
 # 95% prediction limits
-plt.fill_between(x_new, d['lwr_pred'], d['upr_pred'],color="#d3d3d3", label='95% PI (delta method)')
+plt.fill_between(x_new, d['lwr_pred'], d['upr_pred'],color="#d3d3d3", label=str(int(100*(1-alpha)))+'% PI (delta method)')
 # 95% confidence limits
-plt.fill_between(x_new, d['lwr_conf'], d['upr_conf'],color="#ABABAB", label='95% CI (delta method)')
+plt.fill_between(x_new, d['lwr_conf'], d['upr_conf'],color="#ABABAB", label=str(int(100*(1-alpha)))+'% CI (delta method)')
 plt.legend(loc='lower right')
 plt.title('Delta-method using scipy for parameters and covariance')
 plt.xlabel('x= eruption length (min)')
@@ -659,9 +657,9 @@ plt.plot(x, y, '.', label='observations')
 # plt.plot(x_new, y_new, '--k', label='best-fit (lmfit)',linewidth=4)    # lmfit solution of best fit
 plt.plot(x_new, y_new, '-', label='best-fit (scipy)')     # scipy solution of best fit
 # 95% prediction limits
-plt.fill_between(x_new, mc_lwr_pred, mc_upr_pred,color="#d3d3d3", label='95% PI (bootstrap)')
+plt.fill_between(x_new, mc_lwr_pred, mc_upr_pred,color="#d3d3d3", label=str(int(100*(1-alpha)))+'% PI (bootstrap)')
 # 95% confidence limits
-plt.fill_between(x_new, mc_lwr_conf, mc_upr_conf,color="#ABABAB", label='95% CI (bootstrap)')
+plt.fill_between(x_new, mc_lwr_conf, mc_upr_conf,color="#ABABAB", label=str(int(100*(1-alpha)))+'% CI (bootstrap)')
 plt.legend(loc='lower right')
 plt.title('Bootstrap using scipy for optimum parameters')
 plt.xlabel('x= eruption length (min)')
@@ -682,7 +680,7 @@ Method 1. Parametric bootstrap
 
 print("Confidence intervals of parameters using parametric bootstrap")
 print("")
-print("Parameter\t beta_hat \t 95% confidence intervals")
+print("Parameter\t beta_hat \t " + str(int(100*(1-alpha))) + "% confidence intervals")
 print("A:       \t %.4f     \t (%.4f - %.4f)" % (popt[0], b['popt_lwr_conf'][0], b['popt_upr_conf'][0]))
 print("gamma:   \t %.4f     \t (%.4f - %.4f)" % (popt[1], b['popt_lwr_conf'][1], b['popt_upr_conf'][1]))
 print("tau:     \t %.4f     \t (%.4f - %.4f)" % (popt[2], b['popt_lwr_conf'][2], b['popt_upr_conf'][2]))
@@ -711,7 +709,7 @@ upr_ci = popt + qt * se_lin        # upper confidence interval
 # print out a summary
 print("Confidence intervals of parameters using the linearization approach")
 print("")
-print("Parameter \t beta_hat \t se_lin \t Pr(>|t|) \t 95% confidence intervals")
+print("Parameter \t beta_hat \t se_lin \t Pr(>|t|) \t " + str(int(100*(1-alpha))) + "% confidence intervals")
 print("A:        \t %.4f     \t %.4f   \t %.1e     \t (%.4f - %.4f)" % (popt[0], se_lin[0], pval[0], lwr_ci[0], upr_ci[0]))
 print("gamma:    \t %.4f     \t %.4f   \t %.1e     \t (%.4f - %.4f)" % (popt[1], se_lin[1], pval[1], lwr_ci[1], upr_ci[1]))
 print("tau:      \t %.4f     \t %.4f   \t %.1e     \t (%.4f - %.4f)" % (popt[2], se_lin[2], pval[2], lwr_ci[2], upr_ci[2]))
