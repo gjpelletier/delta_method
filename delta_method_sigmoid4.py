@@ -138,8 +138,8 @@ def delta_method(pcov,popt,x_new,f,x,y,alpha):
     # popt = optimum best-fit parameters of the regression function (e.g. from scipy or lmfit)
     # x_new = new x values to evaluate new predicted y_new values (e.g. x_new=linspace(min(x),max(x),100)
     # f = user-defined regression lambda function to predict y given inputs of parameters and x values (e.g. observed x or x_new)
-    # 	For example, if using the 3-parameter nonlinear regression exponential threshold function, then
-    # 	f = lambda param,xval : param[0] + param[1] * exp(param[2] * xval)
+    # 	For example, if using the 4-parameter sigmoid function, then
+    # 	f = lambda param,xval : (param[0]-param[3])/(1+exp(-param[1]*(xval-param[2])))+param[3]
     # x = observed x
     # y = observed y
     # alpha = significance level for the confidence/prediction interval (e.g. alpha=0.05 is the 95% confidence/prediction interval)
@@ -435,7 +435,7 @@ Parametric bootstrapping is an alternative to the delta-method. Next we will app
 First we will define a function that will perform the parameteric bootstrap
 """
 
-def parametric_bootstrap(popt,x_new,f,f_scipy,x,y,alpha,trials):
+def parametric_bootstrap(popt,x_new,f_lambda,f_scipy,x,y,alpha,trials):
     # - - -
     # Function to calculate the confidence interval and prediction interval
     # for any user-defined regression function using a parametric bootstrap
@@ -447,11 +447,11 @@ def parametric_bootstrap(popt,x_new,f,f_scipy,x,y,alpha,trials):
     # INPUT
     # popt = optimum best-fit parameters of the regression function (e.g. from scipy or lmfit)
     # x_new = new x values to evaluate new predicted y_new values (e.g. x_new=linspace(min(x),max(x),100)
-    # f = user-defined regression lambda function to predict y given inputs of parameters and x values (e.g. observed x or x_new)
-    # 	For example, if using the 3-parameter nonlinear regression exponential threshold function, then
-    # 	f = lambda param,xval : param[0] + param[1] * exp(param[2] * xval)
-    # f_scipy = model function for scipy.opt_corve_fit with x as first argument and parameters as separate arguments
-    # 	For example, if using the 3-parameter nonlinear regression exponential threshold function, then:
+    # f_lambda = user-defined regression lambda function to predict y given inputs of parameters and x values (e.g. observed x or x_new)
+    # 	For example, if using the 4-parameter sigmoid function, then
+    # 	f = lambda param,xval : (param[0]-param[3])/(1+exp(-param[1]*(xval-param[2])))+param[3]
+    # f_scipy = model function for scipy.opt_curve_fit with x as first argument and parameters as separate arguments
+    # 	For example, if using the 4-parameter sigmoid function, then:
     #   def f_scipy(x, A, gamma, tau, S):
     #       return (A-S) / ( 1 + exp(-gamma * (x - tau)) ) + S
     # x = observed x
@@ -503,7 +503,7 @@ def parametric_bootstrap(popt,x_new,f,f_scipy,x,y,alpha,trials):
     import inspect
     # - - -
     # calculate predicted y_new at each x_new using optimum parameters
-    y_new = f(popt,x_new)
+    y_new = f_lambda(popt,x_new)
     # - - -
     # some things we need for the bootstrap
     nobs = np.size(x)
@@ -513,13 +513,13 @@ def parametric_bootstrap(popt,x_new,f,f_scipy,x,y,alpha,trials):
     qt = stats.t.ppf(1-alpha/2, df)
     qnorm = stats.norm.ppf(1-alpha/2)
     rq = qt/qnorm # ratio of t-score to normal-score for unbiasing
-    yhat = f(popt,x)
+    yhat = f_lambda(popt,x)
     SSE = np.sum((y-yhat) ** 2)                 # sum of squares (residual error)
     MSE = SSE / df                              # mean square (residual error)
     syx = np.sqrt(MSE)                          # std error of the estimate
     beta_hat = popt               # reference optimum parameters
-    y_hat_ref = f(beta_hat, x)    # reference predicted y_hat at x
-    f_new = f(beta_hat,x_new)     # reference predicted y_new at x_new
+    y_hat_ref = f_lambda(beta_hat, x)    # reference predicted y_hat at x
+    f_new = f_lambda(beta_hat,x_new)     # reference predicted y_new at x_new
     # - - -
     # Monte Carlo simulation
     res_f_hat = np.zeros((trials,n_new))
@@ -528,7 +528,7 @@ def parametric_bootstrap(popt,x_new,f,f_scipy,x,y,alpha,trials):
     for i in range(trials):
         y_b = y_hat_ref + syx * stats.norm.rvs(size=nobs)
         popt_b, pcov_b = opt.curve_fit(f_scipy, x, y_b, p0=popt, bounds=(-np.inf,np.inf))
-        f_b = f(popt_b, x_new)
+        f_b = f_lambda(popt_b, x_new)
         res_popt_b[i,:] = popt_b
         res_f_hat[i,:] = f_b
         res_y_hat[i,:] = f_b + stats.norm.rvs(loc=0,scale=syx,size=1)
@@ -602,8 +602,8 @@ def parametric_bootstrap(popt,x_new,f,f_scipy,x,y,alpha,trials):
 
 """Next we will use the new function to perform the parametric bootstrap"""
 
-# first we will define the f, x_new, and alpha as we did before in the delta-method example
-f = lambda param,xval : (param[0]-param[3])/(1+exp(-param[1]*(xval-param[2])))+param[3]
+# first we will define a lambda function, x_new, and alpha as we did before in the delta-method example
+f_lambda = lambda param,xval : (param[0]-param[3])/(1+exp(-param[1]*(xval-param[2])))+param[3]
 x_new = linspace(1, 6, 100)
 alpha=0.05
 
@@ -629,7 +629,7 @@ popt, pcov = opt.curve_fit(f_scipy, x, y, p0=p_init, bounds=(-np.inf,np.inf))
 # now we are ready to use the parameteric_bootstrap function to find the prediction interval and confidence interval
 # using the scipy estimates of popt with the inputs that we defined previously
 trials = 10000   # number of trials for bootstrap Monte Carlo
-b = parametric_bootstrap(popt,x_new,f,f_scipy,x,y,alpha,trials)
+b = parametric_bootstrap(popt,x_new,f_lambda,f_scipy,x,y,alpha,trials)
 
 # extract the output values from the output dictionary
 y_new = b['y_new']
