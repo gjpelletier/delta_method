@@ -286,7 +286,7 @@ def parametric_bootstrap(popt,x_new,f_lambda,f_scipy,x,y,alpha,trials):
     adj_rsquared = 1-(1-rsquared)*(np.size(x)-1)/(np.size(x)-np.size(popt)-1)  # adjusted rsquared
     # - - -
     # make a string of the lambda function f to save in the output dictionary
-    fstr = str(inspect.getsourcelines(f)[0])
+    fstr = str(inspect.getsourcelines(f_lambda)[0])
     # make the dictionary of output variables
     result = {
             'popt': popt,
