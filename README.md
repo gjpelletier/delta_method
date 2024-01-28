@@ -22,7 +22,7 @@ pip install git+https://github.com/gjpelletier/delta_method.git
 
 Next import the delta_method and parametric_bootstrap functions as follows in your notebook or python code:<br>
 ```
-from weightedcorrs import weightedcorrs
+from delta_method import delta_method, parametric_bootstrap
 ```
 # Example for Google Colab, Jupyter Notebook, and Python
 
