@@ -1,20 +1,33 @@
-# Nonlinear regression using the delta-method or parametric bootstrap to estimate confidence intervals and prediction intervals in Python and Jupyter Notebooks
+# Nonlinear regression using scipy combined with using the delta-method or parametric bootstrap to estimate confidence intervals and prediction intervals
+
+**An example showing how to use new functions called "delta_method" and "parametric_bootstrap"**
 
 by Greg Pelletier (gjpelletier@gmail.com)
 
-Introducing new Python functions using either the delta-method or parametric bootstrap to estimate confidence intervals for predicted values, and prediction intervals for new data, using nonlinear regression. These new functions extend the capabilities of the python packages scipy or lmfit to apply either the delta-method or parametric bootstrap for confidence intervals and prediction intervals. 
+This script uses scipy to find the optimum parameters and the variance-covariance of the parameters for nonlinear regression. We also show how to use the following two new new functions to extend beyond the capabilities of scipy, to estimate confidence intervals for predicted values, and prediction intervals for new data:
 
-The first step is to use either scipy or lmfit to find the optimum parameter values and the variance-covariance matrix of the model parameters. The user may specify any expression for the nonlinear regression model.
+- **delta_method**
+- **parametric_bootstrap**
 
-The second step is to estimate the confidence intervals and prediction intervals using new python functions that apply either the delta-method or parametric bootstrap. 
+The first step is to use scipy to find the best-fit values and the variance-covariance matrix of the model parameters.
 
-The following example is provided: 
-
-- **delta_method_sigmoid4**: In this example we use a 4-parameter logistic function with a sigmoid shape to fit an observed data set provided in the R base package datasets, and consisting of the waiting time between eruptions and the duration of the eruption for the Old Faithful geyser in Yellowstone National Park, Wyoming, USA. This is the data set used in the example the MAP566 online lecture on nonlinear regression (https://jchiquet.github.io/MAP566/docs/regression/map566-lecture-nonlinear-regression.html#confidence-intervals-and-prediction-intervals). This example also shows how to use a **parametric bootstrap** as an alternative to the **delta-method**, and how to calculate confidence intervals for model parameters.
-
-The user may build any expression for the nonlinear relationship between observed x and y for the nonlinear regression using either scipy.optimize.curve_fit or the ExpressionModel function of lmfit.
-
-To estimate the confidence intervals and prediction intervals, we use new python functions that apply either the delta-method or parametric bootstrap as described in Section 5 of this MAP566 online lecture by Julien Chiquet from Institut Polytechnique de Paris:
+The second step is to estimate the confidence intervals and prediction intervals using new delta_metod and parametric_bootstrap functionsas described in this online lecture:
 
 https://jchiquet.github.io/MAP566/docs/regression/map566-lecture-nonlinear-regression.html#confidence-intervals-and-prediction-intervals
 
+# Installation for Google Colab, Jupyter Notebooks, and Python
+
+First install weightedcorrs as follows with pip or !pip in your notebook or terminal:<br>
+```
+pip install git+https://github.com/gjpelletier/delta_method.git
+```
+
+Next import the delta_method and parametric_bootstrap function as follows in your notebook or python code:<br>
+```
+from weightedcorrs import weightedcorrs
+```
+# Example for Google Colab, Jupyter Notebook, and Python
+
+An example showing how to use the new delta_method and parametric_bootstrap functions is provided in this Jupyter Notebook:
+
+https://github.com/gjpelletier/delta_method/blob/main/delta_method_example.ipynb
