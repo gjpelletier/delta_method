@@ -15,7 +15,7 @@ https://jchiquet.github.io/MAP566/docs/regression/map566-lecture-nonlinear-regre
 
 # Installation for Google Colab, Jupyter Notebooks, and Python
 
-First install weightedcorrs as follows with pip or !pip in your notebook or terminal:<br>
+First install delta_method.py as follows with pip or !pip in your notebook or terminal:<br>
 ```
 pip install git+https://github.com/gjpelletier/delta_method.git
 ```
