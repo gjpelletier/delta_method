@@ -1,17 +1,15 @@
 # Nonlinear regression using scipy combined with using the delta-method or parametric bootstrap to estimate confidence intervals and prediction intervals
 
-**An example showing how to use new functions called "delta_method" and "parametric_bootstrap"**
-
 by Greg Pelletier (gjpelletier@gmail.com)
 
-This script uses scipy to find the optimum parameters and the variance-covariance of the parameters for nonlinear regression. We also show how to use the following two new new functions to extend beyond the capabilities of scipy, to estimate confidence intervals for predicted values, and prediction intervals for new data:
+We introduce the following two new new functions, to extend beyond the capabilities of scipy's opt.curve_fit, to estimate confidence intervals for predicted values, and prediction intervals for nonlinear regression:
 
 - **delta_method**
 - **parametric_bootstrap**
 
-The first step is to use scipy to find the best-fit values and the variance-covariance matrix of the model parameters.
+The first step before using either of these two new functions is to use scipy's opt.curve_fit to find the best-fit values and the covariance matrix of the model parameters.
 
-The second step is to estimate the confidence intervals and prediction intervals using new delta_metod and parametric_bootstrap functionsas described in this online lecture:
+The second step is to estimate the confidence intervals and prediction intervals using new delta_metod and parametric_bootstrap functions using the methods described in this online lecture:
 
 https://jchiquet.github.io/MAP566/docs/regression/map566-lecture-nonlinear-regression.html#confidence-intervals-and-prediction-intervals
 
