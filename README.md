@@ -24,6 +24,9 @@ Next import the delta_method and parametric_bootstrap functions as follows in yo
 ```
 from delta_method import delta_method, parametric_bootstrap
 ```
+
+As an alternative, you can also download delta_method.py from this github repository (https://github.com/gjpelletier/delta_method) and add it to your own project.<br>
+
 # Example for Google Colab, Jupyter Notebook, and Python
 
 An example showing how to use the new delta_method and parametric_bootstrap functions is provided in this Jupyter Notebook:
