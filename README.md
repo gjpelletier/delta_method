@@ -1,4 +1,4 @@
-# Nonlinear regression using scipy combined with using the delta-method or parametric bootstrap to estimate confidence intervals and prediction intervals
+# Nonlinear regression using the delta-method or parametric bootstrap to estimate confidence intervals and prediction intervals
 
 by Greg Pelletier (gjpelletier@gmail.com)
 
