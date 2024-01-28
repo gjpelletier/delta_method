@@ -2,7 +2,7 @@
 
 by Greg Pelletier (gjpelletier@gmail.com)
 
-We introduce the following two new new functions, to extend beyond the capabilities of scipy's opt.curve_fit, to estimate confidence intervals for predicted values, and prediction intervals for nonlinear regression:
+We introduce the following two new new functions to estimate confidence intervals for predicted values, and prediction intervals for nonlinear regression:
 
 - **delta_method**
 - **parametric_bootstrap**
