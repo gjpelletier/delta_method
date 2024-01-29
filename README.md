@@ -98,3 +98,8 @@ https://github.com/gjpelletier/delta_method/blob/main/delta_method_example.m
 An example showing how to use the new delta_method and parametric_bootstrap functions is provided in this Jupyter Notebook:
 
 https://github.com/gjpelletier/delta_method/blob/main/delta_method_example.ipynb
+
+# Acknowledgement
+
+The methods used in the delta_method and parametric_bootstrap functions follow the methods described in an online lecture by Dr. Julien Chiquet (École Polytechnique/Université Paris-Saclay/AgroParisTech/INRAE) available at the following link:<br>
+https://jchiquet.github.io/MAP566/docs/regression/map566-lecture-nonlinear-regression.html
