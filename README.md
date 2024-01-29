@@ -1,4 +1,4 @@
-# Confidence and prediction intervals for nonlinear regression using the delta-method or parametric bootstrap in Google Colab, Jupyter Notebook, Python, or MATLAB
+# Confidence and prediction intervals for nonlinear regression using the delta-method or parametric bootstrap in MATLAB, Python, Jupyter Notebook, or Google Colab
 
 by Greg Pelletier (gjpelletier@gmail.com)
 
@@ -15,7 +15,7 @@ The second step is to estimate the confidence intervals and prediction intervals
 
 Download delta_method.m and parametric_boostrap.m from this github repository (https://github.com/gjpelletier/delta_method) or MATLAB File Exchange and add them to your working directory or session search path.<br>
 
-# Installation for Google Colab, Jupyter Notebooks, and Python
+# Installation for Python, Jupyter Notebooks, and Google Colab
 
 First install the new functions as follows with pip or !pip in your notebook or terminal:<br>
 ```
@@ -91,7 +91,7 @@ An example showing how to use the new delta_method and parametric_bootstrap func
 
 https://github.com/gjpelletier/delta_method/blob/main/delta_method_example.m
 
-# Example for Google Colab, Jupyter Notebook, and Python
+# Example for Python, Jupyter Notebook, and Google Colab
 
 An example showing how to use the new delta_method and parametric_bootstrap functions is provided in this Jupyter Notebook:
 
