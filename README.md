@@ -87,18 +87,6 @@ Both functions also include output of the following regression statistics:
 - rsquared: r-squared = SSR/SST
 - adj_rsquared: adjusted squared
 
-
-
-
-
-
-
-
-
-
-List of outputs:
-
-
 # Example for MATLAB
 
 An example showing how to use the new delta_method and parametric_bootstrap functions is provided in this matlab script:
