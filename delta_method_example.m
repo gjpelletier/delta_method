@@ -59,7 +59,7 @@ d = delta_method(pcov,popt,x_new,f,x,y,alpha);
 trials = 10000; 	% number of iterations trials for Monte Carlo simulaton
 b = parametric_bootstrap(popt,x_new,f,x,y,alpha,trials);
 
-% use MATLAB's nlpredci to compare with delta method results
+% use MATLAB's nlpredci to compare with delta method and parametric bootstrap results
 [y_new,dci_nlpredci] = nlpredci(f,x_new,popt,resid,'Covar',pcov,'Alpha',alpha);							% confidence interval
 [y_new,dpi_nlpredci] = nlpredci(f,x_new,popt,resid,'Covar',pcov,'Alpha',alpha,'PredOpt','observation');	% prediction interval
 
@@ -114,6 +114,4 @@ disp(sprintf('param4 \t  %.4f \t (%.4f - %.4f)', popt(4), b.popt_lwr_conf(4), b.
 % param2 	  2.2540 	 (1.4804 - 3.3995)
 % param3 	  3.0553 	 (2.7808 - 3.2558)
 % param4 	  51.3221 	 (44.9778 - 53.9696)
-
-
 
