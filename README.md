@@ -81,7 +81,7 @@ Both functions also include output of the following regression statistics:
 - df: degrees of freedom = nobs-nparam
 - qt: 2-tailed t-statistic at alpha
 - Fstat: F-statistic = MSR/MSE
-- dfn': degrees of freedom for the numerator of the F-test = nparam-1
+- dfn: degrees of freedom for the numerator of the F-test = nparam-1
 - dfd: degrees of freedom for the denominator of the F-test = nobs-nparam
 - pvalue: signficance level of the regression from the probability of the F-test
 - rsquared: r-squared = SSR/SST
