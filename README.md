@@ -1,4 +1,4 @@
-# Confidence intervals for nonlinear regression using the delta-method or parametric bootstrap in Jupyter Notebooks, Python, or MATLAB
+# Confidence and prediction intervals for nonlinear regression using the delta-method or parametric bootstrap in Jupyter Notebooks, Python, or MATLAB
 
 by Greg Pelletier (gjpelletier@gmail.com)
 
