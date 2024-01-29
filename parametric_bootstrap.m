@@ -10,7 +10,7 @@ function result = parametric_bootstrap(popt,x_new,f,x,y,alpha,trials)
 % Greg Pelletier (gjpelletier@gmail.com)
 % - - -
 % INPUT
-% pcov = variance-covariance matrix of the model parameters (e.g. from MATLAB nlinfit)
+% popt = optimum best-fit parameter values (e.g. from MATLAB nlinfit)
 % x_new = new x values to evaluate new predicted y_new values (e.g. x_new=linspace(min(x),max(x),100)
 % f = user-defined regression @ function to predict y given inputs of parameters and x values (e.g. observed x or x_new)
 % 	For example, if using the 4-parameter sigmoid function, then
@@ -84,7 +84,6 @@ res_popt_b = zeros(trials,nparam);
 disp('Running bootstrap Monte Carlo iterations...');
 for i=1:trials
 	y_b = y_hat_ref + syx .* normrnd(0,1,[1,nobs]);
-	% popt_b, pcov_b = opt.curve_fit(f_scipy, x, y_b, p0=popt, bounds=(-np.inf,np.inf))
 	popt_b = nlinfit(x,y_b,f,popt);
 	f_b = f(popt_b, x_new);
 	res_popt_b(i,:) = popt_b;
@@ -112,7 +111,6 @@ MSR = SSR / (length(popt)-1);              	% mean square (regression model)
 Fstat = MSR / MSE;           				% F statistic
 dfn = length(popt) - 1;    					% df numerator = degrees of freedom for model = number of model parameters - 1
 dfd = df;                    				% df denomenator = degrees of freedom of the residual = df = nobs - nparam
-% pvalue = 1-stats.f.cdf(Fstat, dfn, dfd);    % p-value of F test statistic
 pvalue = 1 - fcdf(Fstat, dfn, dfd);			% p-value of F test statistic 
 rsquared = SSR / SST;                                                        	% ordinary rsquared
 adj_rsquared = 1-(1-rsquared) .* (length(x)-1) ./ (length(x)-length(popt)-1);  	% adjusted rsquared
