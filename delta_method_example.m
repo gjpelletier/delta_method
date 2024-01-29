@@ -63,7 +63,7 @@ b = parametric_bootstrap(popt,x_new,f,x,y,alpha,trials);
 [y_new,dci_nlpredci] = nlpredci(f,x_new,popt,resid,'Covar',pcov,'Alpha',alpha);							% confidence interval
 [y_new,dpi_nlpredci] = nlpredci(f,x_new,popt,resid,'Covar',pcov,'Alpha',alpha,'PredOpt','observation');	% prediction interval
 
-% plot the results of the delta method compared with nlpredci
+% plot the results of the delta method compared with MATLAB's nlpredci
 figure
 hold on
 plot(x,y,'.','markersize',10)
@@ -82,7 +82,7 @@ xlabel('x= eruption length (min)')
 ylabel('y= waiting time (min)')
 title('Delta-method results for confidence and prediction intervals')
 
-% plot the results of the parametric bootstrap method compared with nlpredci
+% plot the results of the parametric bootstrap method compared with MATLAB's nlpredci
 figure
 hold on
 plot(x,y,'.','markersize',10)
@@ -108,6 +108,12 @@ disp(sprintf('param1 \t  %.4f \t (%.4f - %.4f)', popt(1), b.popt_lwr_conf(1), b.
 disp(sprintf('param2 \t  %.4f \t (%.4f - %.4f)', popt(2), b.popt_lwr_conf(2), b.popt_upr_conf(2)));
 disp(sprintf('param3 \t  %.4f \t (%.4f - %.4f)', popt(3), b.popt_lwr_conf(3), b.popt_upr_conf(3)));
 disp(sprintf('param4 \t  %.4f \t (%.4f - %.4f)', popt(4), b.popt_lwr_conf(4), b.popt_upr_conf(4)));
+% Confidence intervals of parameters using parametric bootstrap
+% Parameter beta_hat   95% confidence intervals
+% param1 	  82.4659 	 (80.8025 - 85.2731)
+% param2 	  2.2540 	 (1.4804 - 3.3995)
+% param3 	  3.0553 	 (2.7808 - 3.2558)
+% param4 	  51.3221 	 (44.9778 - 53.9696)
 
 
 
