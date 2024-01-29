@@ -73,7 +73,7 @@ Both functions also include output of the following regression statistics:
 - SSE: Sum of Squares Error
 - MSR: Mean Square Regression
 - MSE: Mean Square Error of the residuals
-- syx: standard error of the estimate
+- syx: standard error of the regression
 - nobs: number of observations
 - nparam: number of parameters
 - df: degrees of freedom = nobs-nparam
