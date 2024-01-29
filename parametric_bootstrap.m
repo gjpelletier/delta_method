@@ -1,5 +1,6 @@
 function result = parametric_bootstrap(popt,x_new,f,x,y,alpha,trials)
 
+% version 1.0.29
 % - - -
 % Function to calculate the confidence interval and prediction interval
 % for any user-defined regression function using the parametric bootstrap method
@@ -22,12 +23,19 @@ function result = parametric_bootstrap(popt,x_new,f,x,y,alpha,trials)
 % OUTPUT
 % result = structure with the following output variables:
 %        'popt': optimum best-fit parameter values used as input
+%        'popt_lwr_conf': lower confidence interval for each parameter
+%        'popt_upr_conf': upper confidence interval for each parameter
+%        'popt_b': bootstrap trials of optimum best-fit parameter values (trials x nparam)
+%        'f_hat_b': bootstrap trials of new 'predicted' y values at each x_new (trials x n_new)
+%        'y_hat_b': bootstrap trials of new 'observed' y values at each x_new (trials x n_new)
+%        'fstr': string of the input lambda function of the regression model
 %        'alpha': input significance level for the confidence/prediction interval (e.g. alpha=0.05 is the 95% confidence/prediction interval)
+%        'trials': number of trials for the bootstrap Monte Carlo
 %        'x': observed x values used as input
 %        'y': observed y values used as input
-%        'yhat': predicted y at observed x values
-%        'x_new': new x-values used as input to evaluate unew predicted y_new values
-%        'y_new': new predicted y_new values at new x_new values
+%        'yhat': reference predicted y at observed x values using input popt
+%        'x_new': new x-values used as input to evaluate new predicted y_new values
+%        'y_new': reference new predicted y_new values at new x_new values using input popt
 %        'lwr_conf': lower confidence interval for each value in x_new
 %        'upr_conf': upper confidence interval for each value in x_new
 %        'lwr_pred': lower prediction interval for each value in x_new
@@ -42,6 +50,8 @@ function result = parametric_bootstrap(popt,x_new,f,x,y,alpha,trials)
 %        'nparam': number of parameters
 %        'df': degrees of freedom = nobs-nparam
 %        'qt': 2-tailed t-statistic at alpha
+%        'qnorm': 2-tailed normal distribution score at alpha
+%        'rq': ratio of t-score to normal-score for unbiasing
 %        'Fstat': F-statistic = MSR/MSE
 %        'dfn': degrees of freedom for the numerator of the F-test = nparam-1
 %        'dfd': degrees of freedom for the denominator of the F-test = nobs-nparam
