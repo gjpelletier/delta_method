@@ -80,7 +80,7 @@ legend('observations','best-fit', ...
 	'location','southeast')
 xlabel('x= eruption length (min)')
 ylabel('y= waiting time (min)')
-title('Delta-method results for confidence and prediction intervals')
+title('Delta-method results vs nlpredci')
 
 % plot the results of the parametric bootstrap method compared with MATLAB's nlpredci
 figure
@@ -99,7 +99,7 @@ legend('observations','best-fit', ...
 	'location','southeast')
 xlabel('x= eruption length (min)')
 ylabel('y= waiting time (min)')
-title('Parametric Bootstrap results for confidence and prediction intervals')
+title('Parametric bootstrap results vs nlpredci')
 
 % print the confidence intervals of the model parameters from the parametric bootstrap
 disp('Confidence intervals of parameters using parametric bootstrap');
