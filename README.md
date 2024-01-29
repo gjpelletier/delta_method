@@ -17,7 +17,7 @@ Download delta_method.m and parametric_boostrap.m from this github repository (h
 
 # Installation for Google Colab, Jupyter Notebooks, and Python
 
-First install delta_method.py as follows with pip or !pip in your notebook or terminal:<br>
+First install the new functions as follows with pip or !pip in your notebook or terminal:<br>
 ```
 pip install git+https://github.com/gjpelletier/delta_method.git
 ```
