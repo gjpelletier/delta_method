@@ -9,9 +9,7 @@ We introduce the following two new new functions to estimate confidence interval
 
 The first step before using either of these two new functions is to use scipy's opt.curve_fit or lmfit (Python), or nlinfit (MATLAB) to find the best-fit values and the covariance matrix of the model parameters.
 
-The second step is to estimate the confidence intervals and prediction intervals using new delta_metod or parametric_bootstrap functions using the methods described in this online lecture:
-
-https://jchiquet.github.io/MAP566/docs/regression/map566-lecture-nonlinear-regression.html#confidence-intervals-and-prediction-intervals
+The second step is to estimate the confidence intervals and prediction intervals using new delta_metod or parametric_bootstrap functions
 
 # Installation for MATLAB
 
