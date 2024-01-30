@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.0.29"
+__version__ = "1.0.30"
 
 def delta_method(pcov,popt,x_new,f,x,y,alpha):
 
@@ -63,6 +63,33 @@ def delta_method(pcov,popt,x_new,f,x,y,alpha):
     import numpy as np
     from scipy import stats
     import inspect
+    import sys
+
+    ctrl = np.isreal(x).all() and (not np.isnan(x).any()) and (not np.isinf(x).any()) and x.ndim==1
+    if not ctrl:
+      print('Check x: it needs be a vector of real numbers with no infinite or nan values!','\n')
+      sys.exit()
+    ctrl = np.isreal(y).all() and (not np.isnan(y).any()) and (not np.isinf(y).any()) and y.ndim==1
+    if not ctrl:
+      print('Check y: it needs be a vector of real numbers with no infinite or nan values!','\n')
+      sys.exit()
+    ctrl = np.isreal(x_new).all() and (not np.isnan(x_new).any()) and (not np.isinf(x_new).any()) and x_new.ndim==1
+    if not ctrl:
+      print('Check x_new: it needs be a vector of real numbers with no infinite or nan values!','\n')
+      sys.exit()
+    ctrl = np.isreal(popt).all() and (not np.isnan(popt).any()) and (not np.isinf(popt).any()) and popt.ndim==1
+    if not ctrl:
+      print('Check popt: it needs be a vector of real numbers with no infinite or nan values!','\n')
+      sys.exit()
+    ctrl =  np.size(x)==np.size(y)
+    if not ctrl:
+      print('Check x and y: x and y need to be the same size!','\n')
+      sys.exit()
+    ctrl = np.shape(pcov)[0]==np.shape(pcov)[1] and np.shape(pcov)[0]==np.size(popt)
+    if not ctrl:
+      print('Check pcov and popt: pcov must be a square covariance matrix for popt with dimensions length(popt) x length(popt)!!','\n')
+      sys.exit()
+
     # - - -
     # calculate predicted y_new at each x_new
     y_new = f(popt,x_new)
@@ -230,6 +257,29 @@ def parametric_bootstrap(popt,x_new,f_lambda,f_scipy,x,y,alpha,trials):
     from scipy import stats
     import scipy.optimize as opt
     import inspect
+    import sys
+
+    ctrl = np.isreal(x).all() and (not np.isnan(x).any()) and (not np.isinf(x).any()) and x.ndim==1
+    if not ctrl:
+      print('Check x: it needs be a vector of real numbers with no infinite or nan values!','\n')
+      sys.exit()
+    ctrl = np.isreal(y).all() and (not np.isnan(y).any()) and (not np.isinf(y).any()) and y.ndim==1
+    if not ctrl:
+      print('Check y: it needs be a vector of real numbers with no infinite or nan values!','\n')
+      sys.exit()
+    ctrl = np.isreal(x_new).all() and (not np.isnan(x_new).any()) and (not np.isinf(x_new).any()) and x_new.ndim==1
+    if not ctrl:
+      print('Check x_new: it needs be a vector of real numbers with no infinite or nan values!','\n')
+      sys.exit()
+    ctrl = np.isreal(popt).all() and (not np.isnan(popt).any()) and (not np.isinf(popt).any()) and popt.ndim==1
+    if not ctrl:
+      print('Check popt: it needs be a vector of real numbers with no infinite or nan values!','\n')
+      sys.exit()
+    ctrl =  np.size(x)==np.size(y)
+    if not ctrl:
+      print('Check x and y: x and y need to be the same size!','\n')
+      sys.exit()
+
     # - - -
     # calculate predicted y_new at each x_new using optimum parameters
     y_new = f_lambda(popt,x_new)
@@ -286,7 +336,7 @@ def parametric_bootstrap(popt,x_new,f_lambda,f_scipy,x,y,alpha,trials):
     adj_rsquared = 1-(1-rsquared)*(np.size(x)-1)/(np.size(x)-np.size(popt)-1)  # adjusted rsquared
     # - - -
     # make a string of the lambda function f to save in the output dictionary
-    fstr = str(inspect.getsourcelines(f_lambda)[0])
+    fstr = str(inspect.getsourcelines(f)[0])
     # make the dictionary of output variables
     result = {
             'popt': popt,
