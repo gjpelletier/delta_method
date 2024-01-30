@@ -86,7 +86,7 @@ end
 if size(popt,1)>1
 	popt = popt';
 end
-ctrl = length(popt)==size(pcov,1) & length(popt)==size(pcov,2);
+ctrl = length(popt)==size(pcov,1) & length(popt)==size(pcov,2) & ndims(pcov)==2;
 if ~ctrl
   error('pcov must be a square matrix with dimensions length(popt) x length(popt)!')
 end
