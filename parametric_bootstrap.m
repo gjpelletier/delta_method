@@ -75,6 +75,10 @@ ctrl = isvector(x_new) & isreal(x_new) & ~any(isnan(x_new)) & ~any(isinf(x_new))
 if ~ctrl
   error('Check x_new: it needs be a vector of real numbers with no infinite or nan values!')
 end
+ctrl = isvector(popt) & isreal(popt) & ~any(isnan(popt)) & ~any(isinf(popt));
+if ~ctrl
+  error('Check popt: it needs be a vector of real numbers with no infinite or nan values!')
+end
 if size(x,1)>1
 	x = permute(x,[2 1]);
 end
@@ -83,6 +87,9 @@ if size(y,1)>1
 end
 if size(x_new,1)>1
 	x_new = permute(x_new,[2 1]);
+end
+if size(popt,1)>1
+	popt = permute(popt,[2 1]);
 end
 
 % calculate predicted y_new at each x_new
