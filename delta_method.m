@@ -1,6 +1,6 @@
 function result = delta_method(pcov,popt,x_new,f,x,y,alpha)
 
-% version 1.0.29
+% version 1.0.30
 % - - -
 % Function to calculate the confidence interval and prediction interval
 % for any user-defined regression function using the delta-method
