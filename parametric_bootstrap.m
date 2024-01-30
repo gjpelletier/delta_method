@@ -80,16 +80,16 @@ if ~ctrl
   error('Check popt: it needs be a vector of real numbers with no infinite or nan values!')
 end
 if size(x,1)>1
-	x = permute(x,[2 1]);
+	x = x';
 end
 if size(y,1)>1
-	y = permute(y,[2 1]);
+	y = y';
 end
 if size(x_new,1)>1
-	x_new = permute(x_new,[2 1]);
+	x_new = x_new';
 end
 if size(popt,1)>1
-	popt = permute(popt,[2 1]);
+	popt = popt';
 end
 
 % calculate predicted y_new at each x_new
