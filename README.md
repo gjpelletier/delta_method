@@ -13,7 +13,7 @@ The second step is to estimate the confidence intervals and prediction intervals
 
 # Installation for MATLAB
 
-Download the delta_method.m and parametric_boostrap.m files from this github repository (https://github.com/gjpelletier/delta_method) or MATLAB File Exchange and copy them to your working directory folder or session search path.<br>
+Download the delta_method.m and parametric_boostrap.m files from this github repository (https://github.com/gjpelletier/delta_method) or MATLAB File Exchange and copy them to your working directory or session search path folder.<br>
 
 # Installation for Python, Jupyter Notebook, and Google Colab
 
