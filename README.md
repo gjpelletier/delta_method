@@ -58,11 +58,11 @@ d and b are output structures (MATLAB) or dictionaries (Python) that contain the
 
 In addition, the parametric_boostrap output includes the following:
 
-- popt_lwr_conf': lower confidence interval for each parameter
-- popt_upr_conf': upper confidence interval for each parameter
-- popt_b': bootstrap trials of optimum best-fit parameter values (trials x nparam)
-- f_hat_b': bootstrap trials of new 'predicted' y values at each x_new (trials x n_new)
-- y_hat_b': bootstrap trials of new 'observed' y values at each x_new (trials x n_new)
+- popt_lwr_conf: lower confidence interval for each parameter
+- popt_upr_conf: upper confidence interval for each parameter
+- popt_b: bootstrap trials of optimum best-fit parameter values (trials x nparam)
+- f_hat_b: bootstrap trials of new 'predicted' y values at each x_new (trials x n_new)
+- y_hat_b: bootstrap trials of new 'observed' y values at each x_new (trials x n_new)
 - qnorm: 2-tailed normal distribution score at alpha
 - rq: ratio of t-score to normal-score for unbiasing
 
