@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.0.30"
+__version__ = "1.0.31"
 
 def delta_method(pcov,popt,x_new,f,x,y,alpha):
 
@@ -17,9 +17,12 @@ def delta_method(pcov,popt,x_new,f,x,y,alpha):
     # pcov = variance-covariance matrix of the model parameters (e.g. from scipy or lmfit)
     # popt = optimum best-fit parameters of the regression function (e.g. from scipy or lmfit)
     # x_new = new x values to evaluate new predicted y_new values (e.g. x_new=linspace(min(x),max(x),100)
-    # f = user-defined regression lambda function to predict y given inputs of parameters and x values (e.g. observed x or x_new)
+    # f = user-defined regression function to predict y given inputs of parameters and x values (e.g. observed x or x_new)
     # 	For example, if using the 4-parameter sigmoid function, then
-    # 	f = lambda param,xval : (param[0]-param[3])/(1+exp(-param[1]*(xval-param[2])))+param[3]
+    # 	f = lambda xval,param : (param[0]-param[3])/(1+exp(-param[1]*(xval-param[2])))+param[3]
+    #   or 
+    #   def f(x, A, gamma, tau, S):
+    #       return (A-S) / ( 1 + exp(-gamma * (x - tau)) ) + S
     # x = observed x
     # y = observed y
     # alpha = significance level for the confidence/prediction interval (e.g. alpha=0.05 is the 95% confidence/prediction interval)
@@ -28,7 +31,6 @@ def delta_method(pcov,popt,x_new,f,x,y,alpha):
     # result = dictionary of output varlables with the following keys:
     #        'popt': optimum best-fit parameter values used as input
     #        'pcov': variance-covariance matrix used as input
-    #        'fstr': string of the input lambda function of the regression model
     #        'alpha': input significance level for the confidence/prediction interval (e.g. alpha=0.05 is the 95% confidence/prediction interval)
     #        'x': observed x values used as input
     #        'y': observed y values used as input
@@ -62,7 +64,6 @@ def delta_method(pcov,popt,x_new,f,x,y,alpha):
 
     import numpy as np
     from scipy import stats
-    import inspect
     import sys
 
     ctrl = np.isreal(x).all() and (not np.isnan(x).any()) and (not np.isinf(x).any()) and x.ndim==1
@@ -92,7 +93,7 @@ def delta_method(pcov,popt,x_new,f,x,y,alpha):
 
     # - - -
     # calculate predicted y_new at each x_new
-    y_new = f(popt,x_new)
+    y_new = f(x_new,*popt)
     # calculate derivative gradients at x_new (change in f(x_new) per change in each popt)
     grad_new = np.empty(shape=(np.size(x_new),np.size(popt)))
     h = 1e-8       # h= small change for each popt to balance truncation error and rounding error of the gradient
@@ -101,13 +102,13 @@ def delta_method(pcov,popt,x_new,f,x,y,alpha):
         popt2 = np.copy(popt)
         # gradient forward
         popt2[i] = (1+h) * popt[i]
-        y_new2 = f(popt2, x_new)
+        y_new2 = f(x_new,*popt2)
         dy = y_new2 - y_new
         dpopt = popt2[i] - popt[i]
         grad_up = dy / dpopt
         # gradient backward
         popt2[i] = (1-h) * popt[i]
-        y_new2 = f(popt2, x_new)
+        y_new2 = f(x_new,*popt2)
         dy = y_new2 - y_new
         dpopt = popt2[i] - popt[i]
         grad_dn = dy / dpopt
@@ -127,7 +128,7 @@ def delta_method(pcov,popt,x_new,f,x,y,alpha):
     upr_conf = y_new + delta_f
     # - - -
     # # lwr_pred and upr_pred are prediction intervals of new observations
-    yhat = f(popt,x)
+    yhat = f(x,*popt)
     SSE = np.sum((y-yhat) ** 2)                 # sum of squares (residual error)
     MSE = SSE / df                              # mean square (residual error)
     syx = np.sqrt(MSE)                          # std error of the estimate
@@ -146,13 +147,10 @@ def delta_method(pcov,popt,x_new,f,x,y,alpha):
     rsquared = SSR / SST                                                        # ordinary rsquared
     adj_rsquared = 1-(1-rsquared)*(np.size(x)-1)/(np.size(x)-np.size(popt)-1)  # adjusted rsquared
     # - - -
-    # make a string of the lambda function f to save in the output dictionary
-    fstr = str(inspect.getsourcelines(f)[0])
     # make the dictionary of output variables from the delta-method
     result = {
             'popt': popt,
             'pcov': pcov,
-            'fstr': fstr,
             'alpha': alpha,
             'x': x,
             'y': y,
@@ -186,8 +184,7 @@ def delta_method(pcov,popt,x_new,f,x,y,alpha):
 
     return result
     
-
-def parametric_bootstrap(popt,x_new,f_lambda,f_scipy,x,y,alpha,trials):
+def parametric_bootstrap(popt,x_new,f,x,y,alpha,trials):
 
     """
     # - - -
@@ -201,12 +198,9 @@ def parametric_bootstrap(popt,x_new,f_lambda,f_scipy,x,y,alpha,trials):
     # INPUT
     # popt = optimum best-fit parameters of the regression function (e.g. from scipy or lmfit)
     # x_new = new x values to evaluate new predicted y_new values (e.g. x_new=linspace(min(x),max(x),100)
-    # f_lambda = user-defined regression lambda function to predict y given inputs of parameters and x values (e.g. observed x or x_new)
-    # 	For example, if using the 4-parameter sigmoid function, then
-    # 	f = lambda param,xval : (param[0]-param[3])/(1+exp(-param[1]*(xval-param[2])))+param[3]
-    # f_scipy = model function for scipy.opt_curve_fit with x as first argument and parameters as separate arguments
+    # f = model function for scipy.opt_curve_fit with x as first argument and parameters as separate arguments
     # 	For example, if using the 4-parameter sigmoid function, then:
-    #   def f_scipy(x, A, gamma, tau, S):
+    #   def f(x, A, gamma, tau, S):
     #       return (A-S) / ( 1 + exp(-gamma * (x - tau)) ) + S
     # x = observed x
     # y = observed y
@@ -221,7 +215,6 @@ def parametric_bootstrap(popt,x_new,f_lambda,f_scipy,x,y,alpha,trials):
     #        'popt_b': bootstrap trials of optimum best-fit parameter values (trials x nparam)
     #        'f_hat_b': bootstrap trials of new 'predicted' y values at each x_new (trials x n_new)
     #        'y_hat_b': bootstrap trials of new 'observed' y values at each x_new (trials x n_new)
-    #        'fstr': string of the input lambda function of the regression model
     #        'alpha': input significance level for the confidence/prediction interval (e.g. alpha=0.05 is the 95% confidence/prediction interval)
     #        'trials': number of trials for the bootstrap Monte Carlo
     #        'x': observed x values used as input
@@ -256,7 +249,6 @@ def parametric_bootstrap(popt,x_new,f_lambda,f_scipy,x,y,alpha,trials):
     import numpy as np
     from scipy import stats
     import scipy.optimize as opt
-    import inspect
     import sys
 
     ctrl = np.isreal(x).all() and (not np.isnan(x).any()) and (not np.isinf(x).any()) and x.ndim==1
@@ -279,10 +271,10 @@ def parametric_bootstrap(popt,x_new,f_lambda,f_scipy,x,y,alpha,trials):
     if not ctrl:
       print('Check x and y: x and y need to be the same size!','\n')
       sys.exit()
-
+    
     # - - -
     # calculate predicted y_new at each x_new using optimum parameters
-    y_new = f_lambda(popt,x_new)
+    y_new = f(x_new,*popt)
     # - - -
     # some things we need for the bootstrap
     nobs = np.size(x)
@@ -292,13 +284,13 @@ def parametric_bootstrap(popt,x_new,f_lambda,f_scipy,x,y,alpha,trials):
     qt = stats.t.ppf(1-alpha/2, df)
     qnorm = stats.norm.ppf(1-alpha/2)
     rq = qt/qnorm # ratio of t-score to normal-score for unbiasing
-    yhat = f_lambda(popt,x)
+    yhat = f(x,*popt)
     SSE = np.sum((y-yhat) ** 2)                 # sum of squares (residual error)
     MSE = SSE / df                              # mean square (residual error)
     syx = np.sqrt(MSE)                          # std error of the estimate
     beta_hat = popt               # reference optimum parameters
-    y_hat_ref = f_lambda(beta_hat, x)    # reference predicted y_hat at x
-    f_new = f_lambda(beta_hat,x_new)     # reference predicted y_new at x_new
+    y_hat_ref = f(x,*beta_hat)    # reference predicted y_hat at x
+    f_new = f(x_new,*beta_hat)     # reference predicted y_new at x_new
     # - - -
     # Monte Carlo simulation
     res_f_hat = np.zeros((trials,n_new))
@@ -306,8 +298,8 @@ def parametric_bootstrap(popt,x_new,f_lambda,f_scipy,x,y,alpha,trials):
     res_popt_b = np.zeros((trials,nparam))
     for i in range(trials):
         y_b = y_hat_ref + syx * stats.norm.rvs(size=nobs)
-        popt_b, pcov_b = opt.curve_fit(f_scipy, x, y_b, p0=popt, bounds=(-np.inf,np.inf))
-        f_b = f_lambda(popt_b, x_new)
+        popt_b, pcov_b = opt.curve_fit(f, x, y_b, p0=popt, bounds=(-np.inf,np.inf))
+        f_b = f(x_new,*popt_b)
         res_popt_b[i,:] = popt_b
         res_f_hat[i,:] = f_b
         res_y_hat[i,:] = f_b + stats.norm.rvs(loc=0,scale=syx,size=1)
@@ -335,8 +327,6 @@ def parametric_bootstrap(popt,x_new,f_lambda,f_scipy,x,y,alpha,trials):
     rsquared = SSR / SST                                                        # ordinary rsquared
     adj_rsquared = 1-(1-rsquared)*(np.size(x)-1)/(np.size(x)-np.size(popt)-1)  # adjusted rsquared
     # - - -
-    # make a string of the lambda function f to save in the output dictionary
-    fstr = str(inspect.getsourcelines(f_lambda)[0])
     # make the dictionary of output variables
     result = {
             'popt': popt,
@@ -345,7 +335,6 @@ def parametric_bootstrap(popt,x_new,f_lambda,f_scipy,x,y,alpha,trials):
             'popt_b': res_popt_b,
             'f_hat_b': res_f_hat,
             'y_hat_b': res_y_hat,
-            'fstr': fstr,
             'alpha': alpha,
             'trials': trials,
             'x': x,
