@@ -17,10 +17,8 @@ def delta_method(pcov,popt,x_new,f,x,y,alpha):
     # pcov = variance-covariance matrix of the model parameters (e.g. from scipy or lmfit)
     # popt = optimum best-fit parameters of the regression function (e.g. from scipy or lmfit)
     # x_new = new x values to evaluate new predicted y_new values (e.g. x_new=linspace(min(x),max(x),100)
-    # f = user-defined regression function to predict y given inputs of parameters and x values (e.g. observed x or x_new)
+    # f = model function for scipy.opt_curve_fit with x as first argument and parameters as separate arguments
     # 	For example, if using the 4-parameter sigmoid function, then
-    # 	f = lambda xval,param : (param[0]-param[3])/(1+exp(-param[1]*(xval-param[2])))+param[3]
-    #   or 
     #   def f(x, A, gamma, tau, S):
     #       return (A-S) / ( 1 + exp(-gamma * (x - tau)) ) + S
     # x = observed x
