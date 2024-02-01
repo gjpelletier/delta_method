@@ -41,7 +41,7 @@ INPUTS:
 - popt = optimum best-fit parameters of the regression function
 - pcov = variance-covariance matrix of the model parameters
 - x_new = new x values to evaluate new predicted y_new values (e.g. x_new=linspace(min(x),max(x),100)
-- f = user-defined regression function to predict y-values given inputs of x-values and parameters. The Python version requires x as first argument and parameters as separate arguments after x. The MATLAB version requires parameters as the first argument as a vector before x.
+- f = user-defined regression function to predict y-values given inputs of x-values and parameters. The Python version requires x as the first argument, and parameters as separate arguments after x. The MATLAB version requires parameters together in a vector as the first argument before x. See the example scripts for reference.
 - x = observed x
 - y = observed y
 - alpha = significance level for the confidence/prediction interval (e.g. alpha=0.05 is the 95% confidence/prediction interval)
