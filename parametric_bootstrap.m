@@ -1,6 +1,6 @@
 function result = parametric_bootstrap(popt,x_new,f,x,y,alpha,trials)
 
-% version 1.0.30
+% version 1.0.31
 % - - -
 % Function to calculate the confidence interval and prediction interval
 % for any user-defined regression function using the parametric bootstrap method
