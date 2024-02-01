@@ -8,6 +8,8 @@ def delta_method(pcov,popt,x_new,f,x,y,alpha):
     Function to calculate the confidence interval and prediction interval for any user-defined regression function using the delta-method as described in Sec 5.1 of the following online statistics lecture:
     https://jchiquet.github.io/MAP566/docs/regression/map566-lecture-nonlinear-regression.html
     by Greg Pelletier (gjpelletier@gmail.com)
+    SYNTAX
+    result = delta_method(pcov,popt,x_new,f,x,y,alpha)
     INPUT
     - pcov = variance-covariance matrix of the model parameters (e.g. from scipy or lmfit)
     - popt = optimum best-fit parameters of the regression function (e.g. from scipy or lmfit)
@@ -20,37 +22,37 @@ def delta_method(pcov,popt,x_new,f,x,y,alpha):
     - alpha = significance level for the confidence/prediction interval (e.g. alpha=0.05 is the 95% confidence/prediction interval)
     OUTPUT
     - result = dictionary of output varlables with the following keys:
-           - 'popt': optimum best-fit parameter values used as input
-           - 'pcov': variance-covariance matrix used as input
-           - 'alpha': input significance level for the confidence/prediction interval (e.g. alpha=0.05 is the 95% confidence/prediction interval)
-           - 'x': observed x values used as input
-           - 'y': observed y values used as input
-           - 'yhat': predicted y at observed x values
-           - 'x_new': new x-values used as input to evaluate unew predicted y_new values
-           - 'y_new': new predicted y_new values at new x_new values
-           - 'lwr_conf': lower confidence interval for each value in x_new
-           - 'upr_conf': upper confidence interval for each value in x_new
-           - 'lwr_pred': lower prediction interval for each value in x_new
-           - 'upr_pred': upper prediction interval for each value in x_new
-           - 'grad_new': derivative gradients at x_new (change in f(x_new) per change in each popt)
-           - 'G_new': variance due to each parameter at x_new
-           - 'GS_new': variance due to all parameters combined at x_new
-           - 'SST': Sum of Squares Total
-           - 'SSR': Sum of Squares Regression
-           - 'SSE': Sum of Squares Error
-           - 'MSR': Mean Square Regression
-           - 'MSE': Mean Square Error of the residuals
-           - 'syx': standard error of the estimate
-           - 'nobs': number of observations
-           - 'nparam': number of parameters
-           - 'df': degrees of freedom = nobs-nparam
-           - 'qt': 2-tailed t-statistic at alpha
-           - 'Fstat': F-statistic = MSR/MSE
-           - 'dfn': degrees of freedom for the numerator of the F-test = nparam-1
-           - 'dfd': degrees of freedom for the denominator of the F-test = nobs-nparam
-           - 'pvalue': signficance level of the regression from the probability of the F-test
-           - 'rsquared': r-squared = SSR/SST
-           - 'adj_rsquared': adjusted squared
+    - 'popt': optimum best-fit parameter values used as input
+    - 'pcov': variance-covariance matrix used as input
+    - 'alpha': input significance level for the confidence/prediction interval (e.g. alpha=0.05 is the 95% confidence/prediction interval)
+    - 'x': observed x values used as input
+    - 'y': observed y values used as input
+    - 'yhat': predicted y at observed x values
+    - 'x_new': new x-values used as input to evaluate unew predicted y_new values
+    - 'y_new': new predicted y_new values at new x_new values
+    - 'lwr_conf': lower confidence interval for each value in x_new
+    - 'upr_conf': upper confidence interval for each value in x_new
+    - 'lwr_pred': lower prediction interval for each value in x_new
+    - 'upr_pred': upper prediction interval for each value in x_new
+    - 'grad_new': derivative gradients at x_new (change in f(x_new) per change in each popt)
+    - 'G_new': variance due to each parameter at x_new
+    - 'GS_new': variance due to all parameters combined at x_new
+    - 'SST': Sum of Squares Total
+    - 'SSR': Sum of Squares Regression
+    - 'SSE': Sum of Squares Error
+    - 'MSR': Mean Square Regression
+    - 'MSE': Mean Square Error of the residuals
+    - 'syx': standard error of the estimate
+    - 'nobs': number of observations
+    - 'nparam': number of parameters
+    - 'df': degrees of freedom = nobs-nparam
+    - 'qt': 2-tailed t-statistic at alpha
+    - 'Fstat': F-statistic = MSR/MSE
+    - 'dfn': degrees of freedom for the numerator of the F-test = nparam-1
+    - 'dfd': degrees of freedom for the denominator of the F-test = nobs-nparam
+    - 'pvalue': signficance level of the regression from the probability of the F-test
+    - 'rsquared': r-squared = SSR/SST
+    - 'adj_rsquared': adjusted squared
     """
 
     import numpy as np
@@ -181,6 +183,8 @@ def parametric_bootstrap(popt,x_new,f,x,y,alpha,trials):
     Function to calculate the confidence interval and prediction interval for any user-defined regression function using a parametric bootstrap as described in Sec 5.2 of the following online statistics lecture:
     https://jchiquet.github.io/MAP566/docs/regression/map566-lecture-nonlinear-regression.html
     by Greg Pelletier (gjpelletier@gmail.com)
+    SYNTAX
+    result = parametric_bootstrap(popt,x_new,f,x,y,alpha,trials)
     INPUT
     - popt = optimum best-fit parameters of the regression function (e.g. from scipy or lmfit)
     - x_new = new x values to evaluate new predicted y_new values (e.g. x_new=linspace(min(x),max(x),100)
@@ -193,41 +197,41 @@ def parametric_bootstrap(popt,x_new,f,x,y,alpha,trials):
     - trials = number of trials for the bootstrap Monte Carlo
     OUTPUT
     - result = dictionary of output varlables with the following keys:
-           - 'popt': optimum best-fit parameter values used as input
-           - 'popt_lwr_conf': lower confidence interval for each parameter
-           - 'popt_upr_conf': upper confidence interval for each parameter
-           - 'popt_b': bootstrap trials of optimum best-fit parameter values (trials x nparam)
-           - 'f_hat_b': bootstrap trials of new 'predicted' y values at each x_new (trials x n_new)
-           - 'y_hat_b': bootstrap trials of new 'observed' y values at each x_new (trials x n_new)
-           - 'alpha': input significance level for the confidence/prediction interval (e.g. alpha=0.05 is the 95% confidence/prediction interval)
-           - 'trials': number of trials for the bootstrap Monte Carlo
-           - 'x': observed x values used as input
-           - 'y': observed y values used as input
-           - 'yhat': reference predicted y at observed x values using input popt
-           - 'x_new': new x-values used as input to evaluate new predicted y_new values
-           - 'y_new': reference new predicted y_new values at new x_new values using input popt
-           - 'lwr_conf': lower confidence interval for each value in x_new
-           - 'upr_conf': upper confidence interval for each value in x_new
-           - 'lwr_pred': lower prediction interval for each value in x_new
-           - 'upr_pred': upper prediction interval for each value in x_new
-           - 'SST': Sum of Squares Total
-           - 'SSR': Sum of Squares Regression
-           - 'SSE': Sum of Squares Error
-           - 'MSR': Mean Square Regression
-           - 'MSE': Mean Square Error of the residuals
-           - 'syx': standard error of the estimate
-           - 'nobs': number of observations
-           - 'nparam': number of parameters
-           - 'df': degrees of freedom = nobs-nparam
-           - 'qt': 2-tailed t-statistic at alpha
-           - 'qnorm': 2-tailed normal distribution score at alpha
-           - 'rq': ratio of t-score to normal-score for unbiasing
-           - 'Fstat': F-statistic = MSR/MSE
-           - 'dfn': degrees of freedom for the numerator of the F-test = nparam-1
-           - 'dfd': degrees of freedom for the denominator of the F-test = nobs-nparam
-           - 'pvalue': signficance level of the regression from the probability of the F-test
-           - 'rsquared': r-squared = SSR/SST
-           - 'adj_rsquared': adjusted squared
+    - 'popt': optimum best-fit parameter values used as input
+    - 'popt_lwr_conf': lower confidence interval for each parameter
+    - 'popt_upr_conf': upper confidence interval for each parameter
+    - 'popt_b': bootstrap trials of optimum best-fit parameter values (trials x nparam)
+    - 'f_hat_b': bootstrap trials of new 'predicted' y values at each x_new (trials x n_new)
+    - 'y_hat_b': bootstrap trials of new 'observed' y values at each x_new (trials x n_new)
+    - 'alpha': input significance level for the confidence/prediction interval (e.g. alpha=0.05 is the 95% confidence/prediction interval)
+    - 'trials': number of trials for the bootstrap Monte Carlo
+    - 'x': observed x values used as input
+    - 'y': observed y values used as input
+    - 'yhat': reference predicted y at observed x values using input popt
+    - 'x_new': new x-values used as input to evaluate new predicted y_new values
+    - 'y_new': reference new predicted y_new values at new x_new values using input popt
+    - 'lwr_conf': lower confidence interval for each value in x_new
+    - 'upr_conf': upper confidence interval for each value in x_new
+    - 'lwr_pred': lower prediction interval for each value in x_new
+    - 'upr_pred': upper prediction interval for each value in x_new
+    - 'SST': Sum of Squares Total
+    - 'SSR': Sum of Squares Regression
+    - 'SSE': Sum of Squares Error
+    - 'MSR': Mean Square Regression
+    - 'MSE': Mean Square Error of the residuals
+    - 'syx': standard error of the estimate
+    - 'nobs': number of observations
+    - 'nparam': number of parameters
+    - 'df': degrees of freedom = nobs-nparam
+    - 'qt': 2-tailed t-statistic at alpha
+    - 'qnorm': 2-tailed normal distribution score at alpha
+    - 'rq': ratio of t-score to normal-score for unbiasing
+    - 'Fstat': F-statistic = MSR/MSE
+    - 'dfn': degrees of freedom for the numerator of the F-test = nparam-1
+    - 'dfd': degrees of freedom for the denominator of the F-test = nobs-nparam
+    - 'pvalue': signficance level of the regression from the probability of the F-test
+    - 'rsquared': r-squared = SSR/SST
+    - 'adj_rsquared': adjusted squared
     """
 
     import numpy as np
