@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.0.31"
+__version__ = "1.0.32"
 
 def delta_method(pcov,popt,x_new,f,x,y,alpha):
 
@@ -125,6 +125,7 @@ def delta_method(pcov,popt,x_new,f,x,y,alpha):
     SSE = np.sum((y-yhat) ** 2)                 # sum of squares (residual error)
     MSE = SSE / df                              # mean square (residual error)
     syx = np.sqrt(MSE)                          # std error of the estimate
+    rmse = np.sqrt(SSE / nobs)                  # root mean squared error
     delta_y = np.sqrt(GS_new + MSE) * qt
     lwr_pred = y_new - delta_y
     upr_pred = y_new + delta_y
@@ -163,6 +164,7 @@ def delta_method(pcov,popt,x_new,f,x,y,alpha):
             'MSR': MSR,
             'MSE': MSE,
             'syx': syx,
+            'rmse': rmse,
             'nobs': nobs,
             'nparam': nparam,
             'df': df,
