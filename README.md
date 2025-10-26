@@ -19,7 +19,7 @@ Download the delta_method.m and parametric_boostrap.m files from this github rep
 
 First install the new functions as follows with pip or !pip in your notebook or terminal:<br>
 ```
-pip install git+https://github.com/gjpelletier/delta_method.git
+pip install git+https://github.com/gjpelletier/delta_method.git --upgrade
 ```
 
 Next import the delta_method and parametric_bootstrap functions as follows in your notebook or python code:<br>
