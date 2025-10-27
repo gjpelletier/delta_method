@@ -11,7 +11,7 @@ The first step before using either of these two new functions is to find the opt
 
 The second step is to estimate the confidence intervals and prediction intervals using our new delta_method or parametric_bootstrap functions. We also show how to use the parametric_bootstrap function as an alternative to linear approximations to estimate confidence intervals of the nonlinear regression model parameters.
 
-In addition to the delta_method and parameteric_boostrap functions, this module also contains the following function to make bivariate Kernel Density Estimate (KDE) plots using scaled values of KDE:
+In addition to the delta_method and parameteric_boostrap functions, this module also contains the following function to make bivariate Kernel Density Estimate (KDE) plots using scaled or unscaled values of KDE:
 
 - **kdeplot**
 
