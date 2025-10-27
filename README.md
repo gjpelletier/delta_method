@@ -1,4 +1,4 @@
-## Confidence and prediction intervals for nonlinear regression using the delta-method or parametric bootstrap, and bivariate KDE plots for Python and Jupyter Notebook
+## Confidence and prediction intervals for nonlinear regression using the delta-method or parametric bootstrap, and bivariate KDE plots, for Python and Jupyter Notebook
 
 by Greg Pelletier (gjpelletier@gmail.com)
 
