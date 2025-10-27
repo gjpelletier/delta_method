@@ -12,7 +12,7 @@ The first step before using the delta_method or parametric_bootstrap functions i
 
 The second step is to estimate the confidence intervals and prediction intervals using our new delta_method or parametric_bootstrap functions. We also show how to use the parametric_bootstrap function as an alternative to linear approximations to estimate confidence intervals of the nonlinear regression model parameters.
 
-## Installation for Python, Jupyter Notebook, and Google Colab
+## Installation for Python and Jupyter Notebook
 
 First install the new functions as follows with pip or !pip in your notebook or terminal:<br>
 ```
