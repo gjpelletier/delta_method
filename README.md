@@ -102,12 +102,11 @@ The resulting confidence intervals and prediction intervals of the nonlinear reg
 
 <img width="1920" height="1440" alt="example_waiting_time_vs_eruption_length" src="https://github.com/user-attachments/assets/aec2ae7c-d7e1-4244-9c0a-8d5b014e8ba9" />
 
-
 ### Example 2: Using kdeplot with delta_method to overlay nonlinear regression confidence and prediction intervals onto bivariate kernel density estimates
 
 In this example we analyze the relationship between pH and aragonite saturation (Ωara) in seawater using data from the Multistressor Observations of Coastal Hypoxia and Acidification (MOCHA) Synthesis dataset (https://www.ncei.noaa.gov/access/metadata/landing-page/bin/iso?id=gov.noaa.nodc:0277984) collected along the US west coast during April-Septenber in the upper 200 meters of the ocean within 40 km of the coast. 
 
-Kernel Density Estimate (KDE) values are scaled to values between 0-1. Scaled KDE values below 0.001 are masked using a threshold scaled KDE value of 0.001.
+Kernel Density Estimates (KDE) are scaled to values between 0-1. Scaled KDE values below 0.001 are masked using a threshold value of 0.001.
 
 ```
 import pandas as pd
