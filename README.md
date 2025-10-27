@@ -2,22 +2,15 @@
 
 by Greg Pelletier (gjpelletier@gmail.com)
 
-We introduce the following two new new functions to estimate confidence intervals and prediction intervals for nonlinear regression:
+We introduce the following new functions to estimate confidence intervals and prediction intervals for nonlinear regression, and plot contours of scaled Kernel Density Estimates (KDE):
 
 - **delta_method**
 - **parametric_bootstrap**
-
-The first step before using either of these two new functions is to find the optimum parameter values and the parameter covariance matrix. This step can be done using MATLAB's nlinfit, or Python's scipy opt.curve_fit or lmfit.
-
-The second step is to estimate the confidence intervals and prediction intervals using our new delta_method or parametric_bootstrap functions. We also show how to use the parametric_bootstrap function as an alternative to linear approximations to estimate confidence intervals of the nonlinear regression model parameters.
-
-In addition to the delta_method and parameteric_boostrap functions, this module also contains the following function to make bivariate Kernel Density Estimate (KDE) plots using scaled or unscaled values of KDE:
-
 - **kdeplot**
 
-## Installation for MATLAB
+The first step before using the delta_method or parametric_bootstrap functions is to find the optimum parameter values and the parameter covariance matrix. This step can be done using MATLAB's nlinfit, or Python's scipy opt.curve_fit or lmfit.
 
-Download the delta_method.m and parametric_boostrap.m files from this github repository (https://github.com/gjpelletier/delta_method) or MATLAB File Exchange and copy them to your working directory or session search path folder.<br>
+The second step is to estimate the confidence intervals and prediction intervals using our new delta_method or parametric_bootstrap functions. We also show how to use the parametric_bootstrap function as an alternative to linear approximations to estimate confidence intervals of the nonlinear regression model parameters.
 
 ## Installation for Python, Jupyter Notebook, and Google Colab
 
@@ -30,6 +23,10 @@ Next import the delta_method and parametric_bootstrap functions as follows in yo
 ```
 from delta_method import delta_method, parametric_bootstrap
 ```
+
+## Installation for MATLAB
+
+Download the delta_method.m and parametric_boostrap.m files from this github repository (https://github.com/gjpelletier/delta_method) or MATLAB File Exchange and copy them to your working directory or session search path folder.<br>
 
 ## Syntax
 
@@ -87,19 +84,17 @@ Both functions also include output of the following regression statistics:
 - rsquared: r-squared = SSR/SST
 - adj_rsquared: adjusted squared
 
-## Example for MATLAB
-
-A detailed example showing how to use the delta_method and parametric_bootstrap functions is provided in this matlab script:
-
-https://github.com/gjpelletier/delta_method/blob/main/delta_method_example.m
-
-## Examples for Python and Jupyter Notebook
+## Examples
 
 ### Example 1: Using delta_method and parametric_bootstrap
 
 A detailed example showing how to use the delta_method and parametric_bootstrap functions is provided in this Jupyter Notebook:
 
 [https://github.com/gjpelletier/delta_method/blob/main/delta_method_example.ipynb](https://github.com/gjpelletier/delta_method/blob/main/delta_method_example.ipynb)
+
+and in this matlab script:
+
+[https://github.com/gjpelletier/delta_method/blob/main/delta_method_example.m](https://github.com/gjpelletier/delta_method/blob/main/delta_method_example.m)
 
 ### Example 2: Using kdeplot with delta_method to overlay nonlinear regression prediction intervals onto bivariate kernel density estimates
 
