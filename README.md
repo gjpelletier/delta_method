@@ -101,7 +101,7 @@ An example showing how to use the new delta_method and parametric_bootstrap func
 
 [https://github.com/gjpelletier/delta_method/blob/main/delta_method_example.ipynb](https://github.com/gjpelletier/delta_method/blob/main/delta_method_example.ipynb)
 
-### Example 2: Using kdeplot with delta_method to overlay nonlinear regression prediction intervals
+### Example 2: Using kdeplot with delta_method to overlay nonlinear regression prediction intervals onto bivariate kernel density estimates
 
 ```
 import pandas as pd
