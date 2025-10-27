@@ -116,9 +116,9 @@ from numpy import exp, linspace
 from delta_method import delta_method, kdeplot
 
 # -----
-# ----- Read sample data from the csv available in this github repo ----
+# ----- Read MOCHA seawater pH and aragonite saturation data from the csv available in this github repo ----
 # -----
-df = pd.read_csv('kdeplot_test.csv')
+df = pd.read_csv('mocha_data.csv')
 x=df['omega_ara']
 y=df['pH']
 
