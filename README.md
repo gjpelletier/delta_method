@@ -89,7 +89,7 @@ Both functions also include output of the following regression statistics:
 
 ## Example for MATLAB
 
-An example showing how to use the new delta_method and parametric_bootstrap functions is provided in this matlab script:
+A detailed example showing how to use the delta_method and parametric_bootstrap functions is provided in this matlab script:
 
 https://github.com/gjpelletier/delta_method/blob/main/delta_method_example.m
 
@@ -97,7 +97,7 @@ https://github.com/gjpelletier/delta_method/blob/main/delta_method_example.m
 
 ### Example 1: Using delta_method and parametric_bootstrap
 
-An example showing how to use the new delta_method and parametric_bootstrap functions is provided in this Jupyter Notebook:
+A detailed example showing how to use the delta_method and parametric_bootstrap functions is provided in this Jupyter Notebook:
 
 [https://github.com/gjpelletier/delta_method/blob/main/delta_method_example.ipynb](https://github.com/gjpelletier/delta_method/blob/main/delta_method_example.ipynb)
 
