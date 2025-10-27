@@ -192,7 +192,7 @@ plt.show()
 ```
 <img width="3000" height="1800" alt="kdeplot_example" src="https://github.com/user-attachments/assets/01bcad19-f573-4e9a-be06-28ba20844458" />
 
-### Example 3: KDE plot
+### Example 3: Bivariate scaled KDE plot
 
 ```
 import seaborn as sns
