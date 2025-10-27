@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.0.32"
+__version__ = "1.0.33"
 
 def delta_method(pcov,popt,x_new,f,x,y,alpha):
 
@@ -43,6 +43,7 @@ def delta_method(pcov,popt,x_new,f,x,y,alpha):
     - 'MSR': Mean Square Regression
     - 'MSE': Mean Square Error of the residuals
     - 'syx': standard error of the estimate
+    - 'rmse': root mean squared error
     - 'nobs': number of observations
     - 'nparam': number of parameters
     - 'df': degrees of freedom = nobs-nparam
@@ -222,6 +223,7 @@ def parametric_bootstrap(popt,x_new,f,x,y,alpha,trials):
     - 'MSR': Mean Square Regression
     - 'MSE': Mean Square Error of the residuals
     - 'syx': standard error of the estimate
+    - 'rmse': root mean squared error
     - 'nobs': number of observations
     - 'nparam': number of parameters
     - 'df': degrees of freedom = nobs-nparam
@@ -278,6 +280,7 @@ def parametric_bootstrap(popt,x_new,f,x,y,alpha,trials):
     SSE = np.sum((y-yhat) ** 2)                 # sum of squares (residual error)
     MSE = SSE / df                              # mean square (residual error)
     syx = np.sqrt(MSE)                          # std error of the estimate
+    rmse = np.sqrt(SSE / nobs)                  # root mean squared error
     beta_hat = popt               # reference optimum parameters
     y_hat_ref = f(x,*beta_hat)    # reference predicted y_hat at x
     f_new = f(x_new,*beta_hat)     # reference predicted y_new at x_new
@@ -342,6 +345,7 @@ def parametric_bootstrap(popt,x_new,f,x,y,alpha,trials):
             'MSR': MSR,
             'MSE': MSE,
             'syx': syx,
+            'rmse': rmse,
             'nobs': nobs,
             'nparam': nparam,
             'df': df,
@@ -358,3 +362,89 @@ def parametric_bootstrap(popt,x_new,f,x,y,alpha,trials):
 
     return result
     
+def kdeplot(
+    x, y,
+    ax=None,
+    threshold=0.001,
+    scale_kde=True,
+    cmap='turbo',
+    grid_size=200,
+    num_levels=11,
+    fontsize=12,
+    **kwargs
+):
+    """
+    Add a scaled KDE plot as contourf to a matplotlib figure
+    by Greg Pelletier (gjpelletier@gmail.com)
+
+    Parameters:
+    - x, y: 1D arrays of data points
+    - ax: matplotlib Axes object (optional). If None, uses current axes.
+    - threshold: float, values below this threshold (relative to max KDE) are masked (default 0.001)
+    - scale_kde: bool, whether to scale KDE values to [0, 1] (default True)
+    - cmap: str, colormap name (default 'turbo')
+    - grid_size: int, resolution of meshgrid (default 200)
+    - num_levels: int, number of discrete color levels (default 11)
+    - fontsize: font size to use for colorbar label
+    - kwargs: additional keyword arguments passed to plt.contourf
+    """
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy.stats import gaussian_kde
+    from matplotlib.ticker import FormatStrFormatter
+
+    # Convert inputs to 1D arrays and remove NaNs
+    x = np.asarray(x).ravel()
+    y = np.asarray(y).ravel()
+
+    if x.shape != y.shape:
+        raise ValueError(f"x and y must be broadcastable to the same shape. Got shapes {x.shape} and {y.shape}.")
+
+    mask = ~np.isnan(x) & ~np.isnan(y)
+    x = x[mask]
+    y = y[mask]
+
+    if x.size == 0 or y.size == 0:
+        raise ValueError("Input arrays must contain at least one non-NaN value after filtering.")
+
+    if ax is None:
+        ax = plt.gca()
+
+    # Create meshgrid
+    x_min, x_max = np.min(x), np.max(x)
+    y_min, y_max = np.min(y), np.max(y)
+    xx, yy = np.meshgrid(
+        np.linspace(x_min, x_max, grid_size),
+        np.linspace(y_min, y_max, grid_size)
+    )
+    grid_coords = np.vstack([xx.ravel(), yy.ravel()])
+
+    # Compute KDE
+    kde = gaussian_kde(np.vstack([x, y]))
+    z = kde(grid_coords).reshape(xx.shape)
+
+    # Scale KDE to [0, 1] if requested
+    if scale_kde:
+        z = (z - z.min()) / (z.max() - z.min())
+
+    # Apply threshold mask
+    z_max = z.max()
+    z_masked = np.where(z < threshold * z_max, np.nan, z)
+
+    # Define discrete levels
+    levels = np.linspace(threshold * z_max, z_max, num_levels)
+
+    # Plot contourf
+    cmap = plt.get_cmap(cmap, num_levels)
+    contour = ax.contourf(xx, yy, z_masked, levels=levels, cmap=cmap, **kwargs)
+
+    if scale_kde:
+        levels = np.linspace(threshold, 1.0, num_levels)
+        cbar = plt.colorbar(contour, ax=ax, ticks=levels)
+        cbar.set_label('Scaled KDE (0–1)', fontsize=fontsize)
+        cbar.ax.yaxis.set_major_formatter(FormatStrFormatter('%.1f'))
+    else:
+        cbar = plt.colorbar(contour, ax=ax, label='KDE')
+        cbar.set_label('KDE', fontsize=fontsize)
+
+    return contour
