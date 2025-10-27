@@ -178,6 +178,8 @@ contour = kdeplot(
 plt.plot(x_new, d['y_new'], color='red', label=f'Regression Best Fit')
 plt.plot(x_new, d['lwr_pred'], '--', color='red', label=f'95% Prediction Interval')
 plt.plot(x_new, d['upr_pred'], '--', color='red' )
+plt.plot(x_new, d['lwr_conf'], ':', color='red', label=f'95% Confidence Interval')
+plt.plot(x_new, d['upr_conf'], ':', color='red' )
 
 plt.text(0.05, 0.95, textstr, transform=plt.gca().transAxes,
          fontsize=10, verticalalignment='top',
@@ -212,8 +214,7 @@ plt.xlabel('sepal_width')
 plt.ylabel('sepal_length')
 plt.show()
 ```
-<img width="1920" height="1440" alt="kdeplot_example2" src="https://github.com/user-attachments/assets/32b5a801-4549-481f-a064-5bb2cd128cc9" />
-
+<img width="3000" height="1800" alt="kdeplot_example" src="https://github.com/user-attachments/assets/de3a3db0-ab54-4bdf-bea5-f46b5f92cf0b" />
 
 # Acknowledgement
 
