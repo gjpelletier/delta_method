@@ -98,7 +98,7 @@ and in this matlab script:
 
 In this example we use a 4-parameter logistic function with a sigmoid shape to fit an observed data set. The data set that we use provided by the R base package datasets, and consist of the waiting time between eruptions and the duration of the eruption for the Old Faithful geyser in Yellowstone National Park, Wyoming, USA.
 
-The results of using the delta_method are shown in the following figure:
+The resulting confidence intervals and prediction intervals of the nonlinear regression using the delta_method in this example are shown in the following figure:
 
 <img width="1920" height="1440" alt="example_waiting_time_vs_eruption_length" src="https://github.com/user-attachments/assets/aec2ae7c-d7e1-4244-9c0a-8d5b014e8ba9" />
 
