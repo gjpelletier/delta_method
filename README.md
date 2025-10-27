@@ -1,4 +1,4 @@
-# Confidence and prediction intervals for nonlinear regression using the delta-method or parametric bootstrap in MATLAB, Python, Jupyter Notebook, and Google Colab
+# Confidence and prediction intervals for nonlinear regression using the delta-method or parametric bootstrap in MATLAB, Python, and Jupyter Notebook
 
 by Greg Pelletier (gjpelletier@gmail.com)
 
@@ -10,6 +10,10 @@ We introduce the following two new new functions to estimate confidence interval
 The first step before using either of these two new functions is to find the optimum parameter values and the parameter covariance matrix. This step can be done using MATLAB's nlinfit, or Python's scipy opt.curve_fit or lmfit.
 
 The second step is to estimate the confidence intervals and prediction intervals using our new delta_method or parametric_bootstrap functions. We also show how to use the parametric_bootstrap function as an alternative to linear approximations to estimate confidence intervals of the nonlinear regression model parameters.
+
+In addition to the delta_method and parameteric_boostrap functions, this module also contains the following function to make bivariate Kernel Density Estimate (KDE) plots using scaled values of KDE:
+
+- **kdeplot**
 
 # Installation for MATLAB
 
