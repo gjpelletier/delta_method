@@ -153,7 +153,7 @@ textstr = (
 )
 
 # -----
-# ----- Mane scaled kdeplot with nonlinear regression results plotted ----
+# ----- Make scaled kdeplot with overlay of nonlinear regression results plotted ----
 # -----
 fig, ax = plt.subplots(figsize=(10, 6))
 num_levels=11
