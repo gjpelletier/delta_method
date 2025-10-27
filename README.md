@@ -196,7 +196,7 @@ plt.tight_layout()
 plt.savefig("kdeplot_example.png", dpi=300)
 plt.show()
 ```
-<img width="3000" height="1800" alt="kdeplot_example" src="https://github.com/user-attachments/assets/bd9b0b3c-e982-4a7a-8ae0-ca41484f52b7" />
+<img width="3000" height="1800" alt="kdeplot_example" src="https://github.com/user-attachments/assets/f157932f-6d87-4668-8f4d-e242c57b452c" />
 
 ### Example 3: Bivariate scaled KDE plot
 
