@@ -91,11 +91,106 @@ An example showing how to use the new delta_method and parametric_bootstrap func
 
 https://github.com/gjpelletier/delta_method/blob/main/delta_method_example.m
 
-# Example for Python, Jupyter Notebook, and Google Colab
+# Example 1: Using delta_method and parametric_bootstrap
 
 An example showing how to use the new delta_method and parametric_bootstrap functions is provided in this Jupyter Notebook:
 
 https://github.com/gjpelletier/delta_method/blob/main/delta_method_example.ipynb
+
+# Example 2: Using kdeplot with delta_method to overlay nonlinear regression prediction intervals
+
+```
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from numpy import exp, linspace
+from delta_method import delta_method, kdeplot
+
+# -----
+# ----- Read sample data from the csv available in this github repo ----
+# -----
+df = pd.read_csv('kdeplot_test.csv')
+x=df['omega_ara']
+y=df['pH']
+
+# -----
+# ----- Use delta-method for nonlinear regression ----
+# -----
+import scipy.optimize as opt
+from delta_method import delta_method
+# function for the nonlinear regression
+def f(x, b0, b1, b2, b3):
+     return b0 + b1*x + b2*x**2 + b3*x**3
+# init values for coefs
+b0_init = np.nanmean(y)
+b1_init = 0
+b2_init = 0
+b3_init = 0
+p_init = np.array([b0_init, b1_init, b2_init, b3_init])
+# calc popt, pcov
+popt, pcov = opt.curve_fit(f, x, y, p0=p_init, bounds=(-np.inf,np.inf))
+# settings
+x_new = linspace(np.nanmin(x), np.nanmax(x), 100)
+alpha=0.05
+# run delta_method
+d = delta_method(pcov,popt,x_new,f,x,y,alpha)
+# Format regression equation
+terms = []
+for i, c in enumerate(popt[0:]):
+    if i==0:
+        terms.append(f"{c:.3f}")
+    else:
+        terms.append(f"{c:.3e}x^{i}")
+equation = " + ".join(terms)
+# eqn and stats for plot text box
+textstr = (
+    f"Equation: y = {equation}\n"
+    f"R² = {d['rsquared']:.3f}, RMSE = {d['rmse']:.3f}, p={d['pvalue']:.2e}, N={len(x)}"
+)
+# print('popt=','\n',popt)
+# print('pcov=','\n',pcov)
+# print(textstr)
+
+# -----
+# ----- Mane scaled kdeplot with nonlinear regression results plotted ----
+# -----
+fig, ax = plt.subplots(figsize=(10, 6))
+num_levels=11
+threshold=0.001
+scale_kde = True
+# contour = add_scaled_kde_contourf(
+contour = kdeplot(
+    x,
+    y,
+    ax=ax,
+    threshold=threshold,
+    scale_kde=scale_kde,
+    cmap='turbo',
+    grid_size=1000,
+    num_levels=num_levels
+)
+
+plt.plot(x_new, d['y_new'], color='red', label=f'Regression Best Fit')
+plt.plot(x_new, d['lwr_pred'], '--', color='red', label=f'95% Prediction Interval')
+plt.plot(x_new, d['upr_pred'], '--', color='red' )
+
+plt.text(0.05, 0.95, textstr, transform=plt.gca().transAxes,
+         fontsize=10, verticalalignment='top',
+         bbox=dict(boxstyle='round,pad=0.5', facecolor='white', edgecolor='gray', alpha=0.8))
+
+plt.legend(loc='lower right')
+plt.title('Bivariate KDE of Ωara vs. pH with nonlinear regression and 95% prediction intervals')
+plt.xlabel('x= Ωara', fontsize=12)
+plt.ylabel('y= pH (total)', fontsize=12)
+plt.xlim(np.nanmin(x), np.nanmax(x))
+plt.ylim(np.nanmin(y), np.nanmax(y))
+plt.grid(True)
+plt.tight_layout()
+plt.savefig("kdeplot_example.png", dpi=300)
+plt.show()
+```
+<img width="3000" height="1800" alt="kdeplot_example" src="https://github.com/user-attachments/assets/01bcad19-f573-4e9a-be06-28ba20844458" />
+
 
 # Acknowledgement
 
