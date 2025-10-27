@@ -1,4 +1,4 @@
-# Confidence and prediction intervals for nonlinear regression using the delta-method or parametric bootstrap in MATLAB, Python, and Jupyter Notebook
+## Confidence and prediction intervals for nonlinear regression using the delta-method or parametric bootstrap in MATLAB, Python, and Jupyter Notebook
 
 by Greg Pelletier (gjpelletier@gmail.com)
 
@@ -15,11 +15,11 @@ In addition to the delta_method and parameteric_boostrap functions, this module 
 
 - **kdeplot**
 
-# Installation for MATLAB
+## Installation for MATLAB
 
 Download the delta_method.m and parametric_boostrap.m files from this github repository (https://github.com/gjpelletier/delta_method) or MATLAB File Exchange and copy them to your working directory or session search path folder.<br>
 
-# Installation for Python, Jupyter Notebook, and Google Colab
+## Installation for Python, Jupyter Notebook, and Google Colab
 
 First install the new functions as follows with pip or !pip in your notebook or terminal:<br>
 ```
@@ -31,7 +31,7 @@ Next import the delta_method and parametric_bootstrap functions as follows in yo
 from delta_method import delta_method, parametric_bootstrap
 ```
 
-# Syntax
+## Syntax
 
 SYNTAX:
 
@@ -87,13 +87,13 @@ Both functions also include output of the following regression statistics:
 - rsquared: r-squared = SSR/SST
 - adj_rsquared: adjusted squared
 
-# Example for MATLAB
+## Example for MATLAB
 
 An example showing how to use the new delta_method and parametric_bootstrap functions is provided in this matlab script:
 
 https://github.com/gjpelletier/delta_method/blob/main/delta_method_example.m
 
-# Examples for Python and Jupyter Notebook
+## Examples for Python and Jupyter Notebook
 
 ### Example 1: Using delta_method and parametric_bootstrap
 
