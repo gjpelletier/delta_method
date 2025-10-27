@@ -192,6 +192,23 @@ plt.show()
 ```
 <img width="3000" height="1800" alt="kdeplot_example" src="https://github.com/user-attachments/assets/01bcad19-f573-4e9a-be06-28ba20844458" />
 
+### Example 3: KDE plot
+
+```
+import seaborn as sns
+import matplotlib.pyplot as plt
+from delta_method import kdeplot
+
+iris = sns.load_dataset("iris")
+kdeplot(
+    x=iris['sepal_width'],
+    y=iris['sepal_length']
+)
+plt.xlabel('sepal_width')
+plt.ylabel('sepal_length')
+```
+<img width="1920" height="1440" alt="kdeplot_example2" src="https://github.com/user-attachments/assets/32b5a801-4549-481f-a064-5bb2cd128cc9" />
+
 
 # Acknowledgement
 
