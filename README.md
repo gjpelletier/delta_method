@@ -27,8 +27,6 @@ Next import the delta_method and parametric_bootstrap functions as follows in yo
 from delta_method import delta_method, parametric_bootstrap
 ```
 
-As an alternative, you can also download delta_method.py from this github repository (https://github.com/gjpelletier/delta_method) and add both functions to your own project.<br>
-
 # Syntax
 
 SYNTAX:
