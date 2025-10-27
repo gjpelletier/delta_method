@@ -91,13 +91,15 @@ An example showing how to use the new delta_method and parametric_bootstrap func
 
 https://github.com/gjpelletier/delta_method/blob/main/delta_method_example.m
 
-# Example 1: Using delta_method and parametric_bootstrap
+# Examples for Python and Jupyter Notebook
+
+### Example 1: Using delta_method and parametric_bootstrap
 
 An example showing how to use the new delta_method and parametric_bootstrap functions is provided in this Jupyter Notebook:
 
 https://github.com/gjpelletier/delta_method/blob/main/delta_method_example.ipynb
 
-# Example 2: Using kdeplot with delta_method to overlay nonlinear regression prediction intervals
+### Example 2: Using kdeplot with delta_method to overlay nonlinear regression prediction intervals
 
 ```
 import pandas as pd
@@ -147,9 +149,6 @@ textstr = (
     f"Equation: y = {equation}\n"
     f"R² = {d['rsquared']:.3f}, RMSE = {d['rmse']:.3f}, p={d['pvalue']:.2e}, N={len(x)}"
 )
-# print('popt=','\n',popt)
-# print('pcov=','\n',pcov)
-# print(textstr)
 
 # -----
 # ----- Mane scaled kdeplot with nonlinear regression results plotted ----
