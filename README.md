@@ -105,6 +105,8 @@ The resulting confidence intervals and prediction intervals of the nonlinear reg
 
 ### Example 2: Using kdeplot with delta_method to overlay nonlinear regression prediction intervals onto bivariate kernel density estimates
 
+In this example we analyze the pH and aragonite saturation (Ωara) of seawater samples collected between along the US west coast during April-Septenber in the upper 200 meters of the ocean within 40 km of the coast. 
+
 ```
 import pandas as pd
 import numpy as np
