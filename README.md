@@ -31,7 +31,7 @@ from delta_method import delta_method, parametric_bootstrap
 
 SYNTAX:
 
--	d = delta_method(pcov,popt,x_new,f,x,y,alpha)   
+- d = delta_method(pcov,popt,x_new,f,x,y,alpha)   
 - b = parametric_bootstrap(popt,x_new,f,x,y,alpha,trials)
 
 INPUTS:
