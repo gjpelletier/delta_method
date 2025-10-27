@@ -215,7 +215,7 @@ plt.xlabel('sepal_width')
 plt.ylabel('sepal_length')
 plt.show()
 ```
-<img width="3000" height="1800" alt="kdeplot_example" src="https://github.com/user-attachments/assets/de3a3db0-ab54-4bdf-bea5-f46b5f92cf0b" />
+<img width="1920" height="1440" alt="kdeplot_iris_example" src="https://github.com/user-attachments/assets/0a9640fe-adab-4e55-a0ce-9b8add266262" />
 
 # Acknowledgement
 
