@@ -203,7 +203,7 @@ plt.show()
 
 In this example we use a dataset from seaborn to demonstrate a bivariate Kernel Density Estimate (KDE) plot. A bivariate KDE plot visualizes the joint probability density function of two continuous variables. While a scatterplot shows the individual locations of data points, a bivariate KDE plot focuses on the density of these points, providing a continuous representation of the data's distribution rather than just discrete points. 
 
-The kdeplot function scales the KDE values between 0-1 by default. The user has the option to plot either scaled or unscaled KDE values. Scaled KDE values below 0.001 are masked using a threshold value of 0.001. The user has the option to select any threshold value for masking.
+The user has the option to plot either scaled or unscaled KDE values. We use scaled KDE values in this example, and we mask values below a threshold of 0.001. The user has the option to select any threshold value for masking.
 
 ```
 import seaborn as sns
