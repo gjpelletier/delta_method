@@ -206,6 +206,7 @@ kdeplot(
 )
 plt.xlabel('sepal_width')
 plt.ylabel('sepal_length')
+plt.show()
 ```
 <img width="1920" height="1440" alt="kdeplot_example2" src="https://github.com/user-attachments/assets/32b5a801-4549-481f-a064-5bb2cd128cc9" />
 
