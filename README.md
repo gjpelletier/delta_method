@@ -105,8 +105,7 @@ The resulting confidence intervals and prediction intervals of the nonlinear reg
 
 ### Example 2: Using kdeplot with delta_method to overlay nonlinear regression prediction intervals onto bivariate kernel density estimates
 
-In this example we analyze the relationship between pH and aragonite saturation (Ωara) of seawater samples from the Multistressor Observations of Coastal Hypoxia and Acidi cation
- (MOCHA) Synthesis dataset (https://www.ncei.noaa.gov/access/metadata/landing-page/bin/iso?id=gov.noaa.nodc:0277984) along the US west coast during April-Septenber in the upper 200 meters of the ocean within 40 km of the coast. 
+In this example we analyze the relationship between pH and aragonite saturation (Ωara) in seawater using data from the Multistressor Observations of Coastal Hypoxia and Acidification (MOCHA) Synthesis dataset (https://www.ncei.noaa.gov/access/metadata/landing-page/bin/iso?id=gov.noaa.nodc:0277984) collected along the US west coast during April-Septenber in the upper 200 meters of the ocean within 40 km of the coast. 
 
 ```
 import pandas as pd
