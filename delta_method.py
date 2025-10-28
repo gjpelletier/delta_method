@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.0.35"
+__version__ = "1.0.36"
 
 def delta_method(pcov,popt,x_new,f,x,y,alpha):
 
@@ -371,6 +371,7 @@ def kdeplot(
     grid_size=200,
     num_levels=11,
     fontsize=10,
+    strformat='%.2f',
     **kwargs
 ):
     """
@@ -386,6 +387,7 @@ def kdeplot(
     - grid_size: int, resolution of meshgrid (default 200)
     - num_levels: int, number of discrete color levels (default 11)
     - fontsize: font size to use for colorbar label
+    - strformat: string format of colorbar tick labels (default '%.2f')
     - kwargs: additional keyword arguments passed to plt.contourf
     """
     import numpy as np
@@ -442,10 +444,6 @@ def kdeplot(
         levels = np.linspace(threshold, 1.0, num_levels)
         cbar = plt.colorbar(contour, ax=ax, ticks=levels)
         cbar.set_label('Scaled KDE (0–1)', fontsize=fontsize)
-        if threshold<.01:
-            strformat='%.1f'
-        else:
-            strformat='%.2f'
         cbar.ax.yaxis.set_major_formatter(FormatStrFormatter(strformat))
     else:
         cbar = plt.colorbar(contour, ax=ax, label='KDE')
