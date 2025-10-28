@@ -132,12 +132,8 @@ from delta_method import delta_method
 # function for the nonlinear regression
 def f(x, b0, b1, b2, b3):
      return b0 + b1*x + b2*x**2 + b3*x**3
-# init values for coefs
-b0_init = np.nanmean(y)
-b1_init = 0
-b2_init = 0
-b3_init = 0
-p_init = np.array([b0_init, b1_init, b2_init, b3_init])
+# initial values for coefs
+p_init = np.array([np.nanmean(y), 0, 0, 0])
 # calc popt, pcov
 popt, pcov = opt.curve_fit(f, x, y, p0=p_init, bounds=(-np.inf,np.inf))
 # settings
