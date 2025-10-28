@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.0.36"
+__version__ = "1.0.37"
 
 def delta_method(pcov,popt,x_new,f,x,y,alpha):
 
@@ -369,7 +369,7 @@ def kdeplot(
     scale_kde=True,
     cmap='turbo',
     grid_size=200,
-    num_levels=11,
+    num_levels=21,
     fontsize=10,
     strformat='%.2f',
     **kwargs
