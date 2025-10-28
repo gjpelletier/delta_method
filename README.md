@@ -136,7 +136,7 @@ def f(x, b0, b1, b2, b3):
 p_init = np.array([np.nanmean(y), 0, 0, 0])
 # calc popt, pcov
 popt, pcov = opt.curve_fit(f, x, y, p0=p_init, bounds=(-np.inf,np.inf))
-# settings
+# x_new and alpha
 x_new = linspace(np.nanmin(x), np.nanmax(x), 100)
 alpha=0.05
 # run delta_method
