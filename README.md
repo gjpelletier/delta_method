@@ -198,7 +198,7 @@ plt.tight_layout()
 plt.savefig("kdeplot_example.png", dpi=300)
 plt.show()
 ```
-<img width="3000" height="1800" alt="bivariate_scaled_kde_mocha_omara_vs_phtot_co2sys_AprSep_0-200m_0-40km_v10" src="https://github.com/user-attachments/assets/5a34e14d-5a13-420d-bb0c-03cf93ebc712" />
+<img width="3000" height="1800" alt="kdeplot_mocha_example" src="https://github.com/user-attachments/assets/59092744-8992-4062-8ed7-cd759b848776" />
 
 ### Example 3: Bivariate scaled KDE plot
 
