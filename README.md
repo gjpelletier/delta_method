@@ -203,7 +203,7 @@ plt.show()
 
 In this example we use a dataset from seaborn to demonstrate a bivariate Kernel Density Estimate (KDE) plot. A bivariate KDE plot visualizes the joint probability density function of two continuous variables. While a scatterplot shows the individual locations of data points, a bivariate KDE plot focuses on the density of these points, providing a continuous representation of the data's distribution rather than just discrete points. 
 
-The user has the option to plot either scaled (values between the min and max KDE are scaled to values between 0-1) or unscaled KDE values. We use scaled KDE values in this example, and we mask values below a threshold of 0.001. The user has the option to select any threshold value for masking.
+The user has the option to plot either scaled (values between the min and max KDE are scaled to values between 0-1) or unscaled KDE values. We use scaled KDE values in this example, and we mask values below a threshold of 0.05. The user has the option to select any threshold value for masking.
 
 ```
 import seaborn as sns
@@ -214,13 +214,14 @@ iris = sns.load_dataset("iris")
 kdeplot(
     x=iris['sepal_width'],
     y=iris['sepal_length'],
-    cmap='viridis'
+    cmap='viridis',
+    threshold=.05
 )
 plt.xlabel('sepal_width')
 plt.ylabel('sepal_length')
 plt.show()
 ```
-<img width="1920" height="1440" alt="kdeplot_iris_example" src="https://github.com/user-attachments/assets/7c2fb241-9904-4663-be63-ff136ca243db" />
+<img width="1920" height="1440" alt="kdeplot_iris_example" src="https://github.com/user-attachments/assets/23c67eaf-732a-418d-83ec-4c776e9f0f08" />
 
 # Acknowledgement
 
