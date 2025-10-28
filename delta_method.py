@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.0.34"
+__version__ = "1.0.35"
 
 def delta_method(pcov,popt,x_new,f,x,y,alpha):
 
@@ -442,7 +442,11 @@ def kdeplot(
         levels = np.linspace(threshold, 1.0, num_levels)
         cbar = plt.colorbar(contour, ax=ax, ticks=levels)
         cbar.set_label('Scaled KDE (0–1)', fontsize=fontsize)
-        cbar.ax.yaxis.set_major_formatter(FormatStrFormatter('%.1f'))
+        if threshold<.01:
+            strformat='%.1f'
+        else:
+            strformat='%.2f'
+        cbar.ax.yaxis.set_major_formatter(FormatStrFormatter(strformat))
     else:
         cbar = plt.colorbar(contour, ax=ax, label='KDE')
         cbar.set_label('KDE', fontsize=fontsize)
