@@ -163,10 +163,9 @@ textstr = (
 # ----- Make scaled kdeplot with overlay of nonlinear regression results plotted ----
 # -----
 fig, ax = plt.subplots(figsize=(10, 6))
-num_levels=11
+num_levels=21
 threshold=0.001
 scale_kde = True
-# contour = add_scaled_kde_contourf(
 contour = kdeplot(
     x,
     y,
@@ -199,7 +198,7 @@ plt.tight_layout()
 plt.savefig("kdeplot_example.png", dpi=300)
 plt.show()
 ```
-<img width="3000" height="1800" alt="kdeplot_example" src="https://github.com/user-attachments/assets/f157932f-6d87-4668-8f4d-e242c57b452c" />
+<img width="3000" height="1800" alt="bivariate_scaled_kde_mocha_omara_vs_phtot_co2sys_AprSep_0-200m_0-40km_v10" src="https://github.com/user-attachments/assets/5a34e14d-5a13-420d-bb0c-03cf93ebc712" />
 
 ### Example 3: Bivariate scaled KDE plot
 
