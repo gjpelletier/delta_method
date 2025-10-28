@@ -8,9 +8,11 @@ We introduce the following new functions to estimate confidence intervals and pr
 - **parametric_bootstrap**
 - **kdeplot**
 
-The first step before using the delta_method or parametric_bootstrap functions is to find the optimum parameter values and the parameter covariance matrix. This step can be done using MATLAB's nlinfit, or Python's scipy opt.curve_fit or lmfit.
+The first step before using the **delta_method** or **parametric_bootstrap** functions is to find the optimum parameter values and the parameter covariance matrix. This step can be done using MATLAB's nlinfit, or Python's scipy opt.curve_fit or lmfit.
 
 The second step is to estimate the confidence intervals and prediction intervals using our new delta_method or parametric_bootstrap functions. We also show how to use the parametric_bootstrap function as an alternative to linear approximations to estimate confidence intervals of the nonlinear regression model parameters.
+
+The **kdeplot** function produces a bivariate KDE plot to visualize the joint probability density function of two continuous variables. While a scatterplot shows the individual locations of data points, a bivariate KDE plot focuses on the density of these points, providing a continuous representation of the data's distribution rather than just discrete points.
 
 ## Installation for Python and Jupyter Notebook
 
