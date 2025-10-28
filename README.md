@@ -215,14 +215,14 @@ kdeplot(
     x=iris['sepal_width'],
     y=iris['sepal_length'],
     cmap='viridis',
-    num_levels=10,
+    num_levels=20,
     threshold=.05
 )
 plt.xlabel('sepal_width')
 plt.ylabel('sepal_length')
 plt.show()
 ```
-<img width="1920" height="1440" alt="kdeplot_iris_example" src="https://github.com/user-attachments/assets/57af3794-c036-4d16-a2c8-eacbd89cad2d" />
+<img width="1920" height="1440" alt="kdeplot_iris_example" src="https://github.com/user-attachments/assets/6c0a6120-3ddc-477c-bbfb-9eaa926cd27b" />
 
 # Acknowledgement
 
