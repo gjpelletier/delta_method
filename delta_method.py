@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.0.37"
+__version__ = "1.0.38"
 
 def delta_method(pcov,popt,x_new,f,x,y,alpha):
 
@@ -369,7 +369,7 @@ def kdeplot(
     scale_kde=True,
     cmap='turbo',
     grid_size=200,
-    num_levels=21,
+    num_levels=None,
     fontsize=10,
     strformat='%.2f',
     **kwargs
@@ -409,6 +409,18 @@ def kdeplot(
     if x.size == 0 or y.size == 0:
         raise ValueError("Input arrays must contain at least one non-NaN value after filtering.")
 
+    if num_levels==None:
+        if threshold<0.05:
+            num_levels=21
+        elif threshold<0.1:
+            num_levels=20
+        else:
+            num_levels=19
+    elif isinstance(num_levels, int) & (num_levels<=1 or num_levels>256):
+        num_levels = 20
+    elif not isinstance(num_levels, int):
+        num_levels = 20
+
     if ax is None:
         ax = plt.gca()
 
@@ -442,7 +454,12 @@ def kdeplot(
 
     if scale_kde:
         levels = np.linspace(threshold, 1.0, num_levels)
-        cbar = plt.colorbar(contour, ax=ax, ticks=levels)
+        # levels = np.linspace(0, 1.0, num_levels)
+        # levels[0]=threshold
+        if num_levels<22:
+            cbar = plt.colorbar(contour, ax=ax, ticks=levels)
+        else:
+            cbar = plt.colorbar(contour, ax=ax)
         cbar.set_label('Scaled KDE (0–1)', fontsize=fontsize)
         cbar.ax.yaxis.set_major_formatter(FormatStrFormatter(strformat))
     else:
