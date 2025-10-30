@@ -208,18 +208,27 @@ import matplotlib.pyplot as plt
 from delta_method import kdeplot
 
 iris = sns.load_dataset("iris")
+plt.scatter(
+    x=iris['sepal_width'],
+    y=iris['sepal_length'],
+    color='gray',
+    s=10
+)
 kdeplot(
     x=iris['sepal_width'],
     y=iris['sepal_length'],
+    fill=False,
     cmap='viridis',
-    num_levels=20,
-    threshold=.05
+    cbar=False,
+    clabel=True,
+    clabel_fontsize=8
 )
+
 plt.xlabel('sepal_width')
 plt.ylabel('sepal_length')
 plt.show()
 ```
-<img width="1920" height="1440" alt="kdeplot_iris_example" src="https://github.com/user-attachments/assets/6c0a6120-3ddc-477c-bbfb-9eaa926cd27b" />
+<img width="1920" height="1440" alt="kdeplot_iris_example" src="https://github.com/user-attachments/assets/37596ca4-d267-402e-9fb5-1f16f1766c84" />
 
 # Acknowledgement
 
