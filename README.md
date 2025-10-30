@@ -208,12 +208,14 @@ import matplotlib.pyplot as plt
 from delta_method import kdeplot
 
 iris = sns.load_dataset("iris")
+# Scatter plot of the x and y data
 plt.scatter(
     x=iris['sepal_width'],
     y=iris['sepal_length'],
     color='gray',
     s=10
 )
+# Scaled KDE contours of the x and y data
 kdeplot(
     x=iris['sepal_width'],
     y=iris['sepal_length'],
