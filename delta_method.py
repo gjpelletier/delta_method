@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.0.38"
+__version__ = "1.0.40"
 
 def delta_method(pcov,popt,x_new,f,x,y,alpha):
 
@@ -367,7 +367,10 @@ def kdeplot(
     ax=None,
     threshold=0.001,
     scale_kde=True,
+    shade=True,
+    color=None,
     cmap='turbo',
+    cbar=True,
     grid_size=200,
     num_levels=None,
     fontsize=10,
@@ -383,7 +386,10 @@ def kdeplot(
     - ax: matplotlib Axes object (optional). If None, uses current axes.
     - threshold: float, values below this threshold (relative to max KDE) are masked (default 0.001)
     - scale_kde: bool, whether to scale KDE values to [0, 1] (default True)
+    - shade: bool, whether to use contourf (True) or contour (False)
+    - color: colors of the levels, i.e. the lines for contour and the areas for contourf (default None))
     - cmap: str, colormap name (default 'turbo')
+    - cbar: bool, whether to show a colorbar for the plot (default True if cmap is used)
     - grid_size: int, resolution of meshgrid (default 200)
     - num_levels: int, number of discrete color levels (default 11)
     - fontsize: font size to use for colorbar label
@@ -448,22 +454,29 @@ def kdeplot(
     # Define discrete levels
     levels = np.linspace(threshold * z_max, z_max, num_levels)
 
-    # Plot contourf
-    cmap = plt.get_cmap(cmap, num_levels)
-    contour = ax.contourf(xx, yy, z_masked, levels=levels, cmap=cmap, **kwargs)
-
-    if scale_kde:
-        levels = np.linspace(threshold, 1.0, num_levels)
-        # levels = np.linspace(0, 1.0, num_levels)
-        # levels[0]=threshold
-        if num_levels<22:
-            cbar = plt.colorbar(contour, ax=ax, ticks=levels)
-        else:
-            cbar = plt.colorbar(contour, ax=ax)
-        cbar.set_label('Scaled KDE (0–1)', fontsize=fontsize)
-        cbar.ax.yaxis.set_major_formatter(FormatStrFormatter(strformat))
+    # Use either the colors or cmap
+    if color==None:
+        cmap = plt.get_cmap(cmap, num_levels)
     else:
-        cbar = plt.colorbar(contour, ax=ax, label='KDE')
-        cbar.set_label('KDE', fontsize=fontsize)
+        cmap = None
+
+    if shade:
+        contour = ax.contourf(xx, yy, z_masked, levels=levels, colors=color, cmap=cmap, **kwargs)
+    else:
+        contour = ax.contour(xx, yy, z_masked, levels=levels, colors=color, cmap=cmap, **kwargs)
+
+    # add colorbar
+    if cbar and cmap != None:
+        if scale_kde:
+            levels = np.linspace(threshold, 1.0, num_levels)
+            if num_levels<22:
+                cbar = plt.colorbar(contour, ax=ax, ticks=levels)
+            else:
+                cbar = plt.colorbar(contour, ax=ax)
+            cbar.set_label('Scaled KDE (0–1)', fontsize=fontsize)
+            cbar.ax.yaxis.set_major_formatter(FormatStrFormatter(strformat))
+        else:
+            cbar = plt.colorbar(contour, ax=ax, label='KDE')
+            cbar.set_label('KDE', fontsize=fontsize)
 
     return contour
