@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.0.40"
+__version__ = "1.0.41"
 
 def delta_method(pcov,popt,x_new,f,x,y,alpha):
 
@@ -367,7 +367,7 @@ def kdeplot(
     ax=None,
     threshold=0.001,
     scale_kde=True,
-    shade=True,
+    fill=True,
     color=None,
     cmap='turbo',
     cbar=True,
@@ -386,7 +386,7 @@ def kdeplot(
     - ax: matplotlib Axes object (optional). If None, uses current axes.
     - threshold: float, values below this threshold (relative to max KDE) are masked (default 0.001)
     - scale_kde: bool, whether to scale KDE values to [0, 1] (default True)
-    - shade: bool, whether to use contourf (True) or contour (False)
+    - fill: bool, whether to use contourf (True) or contour (False)
     - color: colors of the levels, i.e. the lines for contour and the areas for contourf (default None))
     - cmap: str, colormap name (default 'turbo')
     - cbar: bool, whether to show a colorbar for the plot (default True if cmap is used)
@@ -460,7 +460,7 @@ def kdeplot(
     else:
         cmap = None
 
-    if shade:
+    if fill:
         contour = ax.contourf(xx, yy, z_masked, levels=levels, colors=color, cmap=cmap, **kwargs)
     else:
         contour = ax.contour(xx, yy, z_masked, levels=levels, colors=color, cmap=cmap, **kwargs)
