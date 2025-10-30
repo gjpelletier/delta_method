@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.0.41"
+__version__ = "1.0.42"
 
 def delta_method(pcov,popt,x_new,f,x,y,alpha):
 
@@ -371,10 +371,15 @@ def kdeplot(
     color=None,
     cmap='turbo',
     cbar=True,
+    cbar_fontsize=10,
+    cbar_fmt='%.2f',
     grid_size=200,
     num_levels=None,
-    fontsize=10,
-    strformat='%.2f',
+    linewidths=1,
+    linestyles='solid',
+    clabel=False,
+    clabel_fontsize=8,
+    clabel_fmt='%.2f',
     **kwargs
 ):
     """
@@ -390,10 +395,16 @@ def kdeplot(
     - color: colors of the levels, i.e. the lines for contour and the areas for contourf (default None))
     - cmap: str, colormap name (default 'turbo')
     - cbar: bool, whether to show a colorbar for the plot (default True if cmap is used)
+    - cbar_fontsize: font size to use for colorbar label
+    - cbar_fmt: string format of colorbar tick labels (default '%.2f')
     - grid_size: int, resolution of meshgrid (default 200)
     - num_levels: int, number of discrete color levels (default 11)
-    - fontsize: font size to use for colorbar label
-    - strformat: string format of colorbar tick labels (default '%.2f')
+    - linewidths: float, contour line widths if fill=False (default 1)
+    - linestyles: contour line style if fill=False  
+        'solid' (default) 'dashed', 'dashdot', 'dotted'
+    - clabel: bool, whether to add labels to contour lines, used if fill=False
+    - clabel_fontsize: float, font size for contour line labels (default 8),
+    - clabel_fmt: string format of contour line labels (default '%.2f')
     - kwargs: additional keyword arguments passed to plt.contourf
     """
     import numpy as np
@@ -461,9 +472,15 @@ def kdeplot(
         cmap = None
 
     if fill:
-        contour = ax.contourf(xx, yy, z_masked, levels=levels, colors=color, cmap=cmap, **kwargs)
+        contour = ax.contourf(xx, yy, z_masked, 
+            levels=levels, colors=color, cmap=cmap, **kwargs)
     else:
-        contour = ax.contour(xx, yy, z_masked, levels=levels, colors=color, cmap=cmap, **kwargs)
+        contour = ax.contour(xx, yy, z_masked, 
+            levels=levels, colors=color, cmap=cmap, 
+            linewidths=linewidths, linestyles=linestyles, **kwargs)
+        if clabel:
+            # Add labels to the contour lines
+            plt.clabel(contour, inline=True, fontsize=clabel_fontsize, fmt=clabel_fmt)
 
     # add colorbar
     if cbar and cmap != None:
@@ -473,10 +490,10 @@ def kdeplot(
                 cbar = plt.colorbar(contour, ax=ax, ticks=levels)
             else:
                 cbar = plt.colorbar(contour, ax=ax)
-            cbar.set_label('Scaled KDE (0–1)', fontsize=fontsize)
-            cbar.ax.yaxis.set_major_formatter(FormatStrFormatter(strformat))
+            cbar.set_label('Scaled KDE (0–1)', fontsize=cbar_fontsize)
+            cbar.ax.yaxis.set_major_formatter(FormatStrFormatter(cbar_fmt))
         else:
             cbar = plt.colorbar(contour, ax=ax, label='KDE')
-            cbar.set_label('KDE', fontsize=fontsize)
+            cbar.set_label('KDE', fontsize=cbar_fontsize)
 
     return contour
