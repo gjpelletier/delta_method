@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.0.43"
+__version__ = "1.0.44"
 
 def delta_method(pcov,popt,x_new,f,x,y,alpha):
 
@@ -468,7 +468,10 @@ def kdeplot(
 
     # Define discrete levels
     if levels==None:
-        levels = np.linspace(threshold * z_max, z_max, num_levels)
+        if scale_kde:
+            levels = np.linspace(threshold, 1.0, num_levels)
+        else:
+            levels = np.linspace(threshold * z_max, z_max, num_levels)
 
     # Use either the colors or cmap
     if color==None:
@@ -490,8 +493,6 @@ def kdeplot(
     # add colorbar
     if cbar and cmap != None:
         if scale_kde:
-            if levels==None:
-                levels = np.linspace(threshold, 1.0, num_levels)
             if num_levels<22:
                 cbar = plt.colorbar(contour, ax=ax, ticks=levels)
             else:
