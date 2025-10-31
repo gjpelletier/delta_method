@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.0.44"
+__version__ = "1.0.45"
 
 def delta_method(pcov,popt,x_new,f,x,y,alpha):
 
@@ -362,7 +362,7 @@ def parametric_bootstrap(popt,x_new,f,x,y,alpha,trials):
 
     return result
     
-def kdeplot(
+def kde_contour(
     x, y,
     ax=None,
     threshold=0.001,
@@ -384,7 +384,7 @@ def kdeplot(
     **kwargs
 ):
     """
-    Add a scaled KDE plot as contourf to a matplotlib figure
+    Add a scaled KDE plot as contourf or contour plot object in a matplotlib figure
     by Greg Pelletier (gjpelletier@gmail.com)
 
     Parameters:
