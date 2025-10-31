@@ -104,7 +104,7 @@ The resulting confidence intervals and prediction intervals of the nonlinear reg
 
 <img width="1920" height="1440" alt="example_waiting_time_vs_eruption_length" src="https://github.com/user-attachments/assets/aec2ae7c-d7e1-4244-9c0a-8d5b014e8ba9" />
 
-### Example 2: Using kdeplot with delta_method to overlay nonlinear regression confidence and prediction intervals onto bivariate kernel density estimates
+### Example 2: Using kde_contour with delta_method to overlay nonlinear regression confidence and prediction intervals onto bivariate kernel density estimates
 
 In this example we analyze the relationship between pH and aragonite saturation (Ωara) in seawater using data from the Multistressor Observations of Coastal Hypoxia and Acidification (MOCHA) Synthesis dataset (https://www.ncei.noaa.gov/access/metadata/landing-page/bin/iso?id=gov.noaa.nodc:0277984). We use a subset of the MOCHA data collected along the US west coast during April-September in the upper 200 meters of the ocean within 40 km of the coast. 
 
@@ -196,7 +196,7 @@ plt.show()
 ```
 <img width="3000" height="1800" alt="kdeplot_mocha_example" src="https://github.com/user-attachments/assets/59092744-8992-4062-8ed7-cd759b848776" />
 
-### Example 3: Bivariate scaled KDE plot
+### Example 3: Bivariate scaled KDE contour plot
 
 In this example we use a dataset from seaborn to demonstrate a simple bivariate Kernel Density Estimate (KDE) plot. A bivariate KDE plot visualizes the joint probability density function of two continuous variables. While a scatterplot shows the individual locations of data points, a bivariate KDE plot focuses on the density of these points, providing a continuous representation of the data's distribution rather than just discrete points. 
 
