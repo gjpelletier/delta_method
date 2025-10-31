@@ -2,7 +2,7 @@
 
 by Greg Pelletier (gjpelletier@gmail.com)
 
-We introduce the following new functions to estimate confidence intervals and prediction intervals for nonlinear regression, and plot contours of scaled Kernel Density Estimates (KDE):
+We introduce the following new functions to estimate confidence intervals and prediction intervals for nonlinear regression, and plot contours of scaled or un-scaled Kernel Density Estimates (KDE):
 
 - **delta_method**
 - **parametric_bootstrap**
