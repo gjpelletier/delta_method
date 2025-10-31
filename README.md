@@ -156,7 +156,7 @@ textstr = (
 )
 
 # -----
-# ----- Make scaled kdeplot with overlay of nonlinear regression results plotted ----
+# ----- Use kde_contour for bivariate KDE contour plot, and overlay it with the regression results ----
 # -----
 fig, ax = plt.subplots(figsize=(10, 6))
 num_levels=21
