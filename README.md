@@ -12,7 +12,7 @@ The first step before using the **delta_method** or **parametric_bootstrap** fun
 
 The second step is to estimate the confidence intervals and prediction intervals using our new delta_method or parametric_bootstrap functions. We also show how to use the parametric_bootstrap function as an alternative to linear approximations to estimate confidence intervals of the nonlinear regression model parameters.
 
-The **kde_contour** function is an alternative to a scatterplot for visualizing the distribution of two variables with a very large number of samples. It produces a bivariate KDE plot to visualize the joint probability density function of two continuous variables. While a scatterplot shows the individual locations of data points, a bivariate KDE plot focuses on the density of these points, providing a continuous representation of the data's distribution rather than just discrete points.
+The **kde_contour** function is an alternative to a scatterplot for visualizing the distribution of two variables with a very large number of samples. It produces a bivariate KDE contour plot to visualize the joint probability density function of two continuous variables. While a scatterplot shows the individual locations of data points, a bivariate KDE contour plot focuses on the density of these points, providing a continuous representation of the data's distribution rather than just discrete points.
 
 ## Installation for Python and Jupyter Notebook
 
