@@ -6,13 +6,13 @@ We introduce the following new functions to estimate confidence intervals and pr
 
 - **delta_method**
 - **parametric_bootstrap**
-- **kdeplot**
+- **kde_contour**
 
 The first step before using the **delta_method** or **parametric_bootstrap** functions is to find the optimum parameter values and the parameter covariance matrix. This step can be done using MATLAB's nlinfit, or Python's scipy opt.curve_fit or lmfit.
 
 The second step is to estimate the confidence intervals and prediction intervals using our new delta_method or parametric_bootstrap functions. We also show how to use the parametric_bootstrap function as an alternative to linear approximations to estimate confidence intervals of the nonlinear regression model parameters.
 
-The **kdeplot** function is an alternative to a scatterplot for visualizing the distribution of two variables with a very large number of samples. It produces a bivariate KDE plot to visualize the joint probability density function of two continuous variables. While a scatterplot shows the individual locations of data points, a bivariate KDE plot focuses on the density of these points, providing a continuous representation of the data's distribution rather than just discrete points.
+The **kde_contour** function is an alternative to a scatterplot for visualizing the distribution of two variables with a very large number of samples. It produces a bivariate KDE plot to visualize the joint probability density function of two continuous variables. While a scatterplot shows the individual locations of data points, a bivariate KDE plot focuses on the density of these points, providing a continuous representation of the data's distribution rather than just discrete points.
 
 ## Installation for Python and Jupyter Notebook
 
@@ -115,7 +115,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from numpy import exp, linspace
-from delta_method import delta_method, kdeplot
+from delta_method import delta_method, kde_contour
 
 # -----
 # ----- Read MOCHA seawater data from the csv available in this github repo ----
@@ -162,7 +162,7 @@ fig, ax = plt.subplots(figsize=(10, 6))
 num_levels=21
 threshold=0.001
 scale_kde = True
-contour = kdeplot(
+contour = kde_contour(
     x,
     y,
     ax=ax,
@@ -205,7 +205,7 @@ The user has the option to plot either scaled (values between the min and max KD
 ```
 import seaborn as sns
 import matplotlib.pyplot as plt
-from delta_method import kdeplot
+from delta_method import kde_contour
 
 iris = sns.load_dataset("iris")
 # Scatter plot of the x and y data
@@ -216,7 +216,7 @@ plt.scatter(
     s=10
 )
 # Scaled KDE contours of the x and y data
-kdeplot(
+kde_contour(
     x=iris['sepal_width'],
     y=iris['sepal_length'],
     fill=False,
