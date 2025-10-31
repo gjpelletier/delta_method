@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.0.42"
+__version__ = "1.0.43"
 
 def delta_method(pcov,popt,x_new,f,x,y,alpha):
 
@@ -374,6 +374,7 @@ def kdeplot(
     cbar_fontsize=10,
     cbar_fmt='%.2f',
     grid_size=200,
+    levels=None,
     num_levels=None,
     linewidths=1,
     linestyles='solid',
@@ -398,6 +399,7 @@ def kdeplot(
     - cbar_fontsize: font size to use for colorbar label
     - cbar_fmt: string format of colorbar tick labels (default '%.2f')
     - grid_size: int, resolution of meshgrid (default 200)
+    - levels: int, list, or array-like, number and positions of the contour lines / regions
     - num_levels: int, number of discrete color levels (default 11)
     - linewidths: float, contour line widths if fill=False (default 1)
     - linestyles: contour line style if fill=False  
@@ -407,6 +409,7 @@ def kdeplot(
     - clabel_fmt: string format of contour line labels (default '%.2f')
     - kwargs: additional keyword arguments passed to plt.contourf
     """
+
     import numpy as np
     import matplotlib.pyplot as plt
     from scipy.stats import gaussian_kde
@@ -426,17 +429,18 @@ def kdeplot(
     if x.size == 0 or y.size == 0:
         raise ValueError("Input arrays must contain at least one non-NaN value after filtering.")
 
-    if num_levels==None:
-        if threshold<0.05:
-            num_levels=21
-        elif threshold<0.1:
-            num_levels=20
-        else:
-            num_levels=19
-    elif isinstance(num_levels, int) & (num_levels<=1 or num_levels>256):
-        num_levels = 20
-    elif not isinstance(num_levels, int):
-        num_levels = 20
+    if levels==None:
+        if num_levels==None:
+            if threshold<0.05:
+                num_levels=21
+            elif threshold<0.1:
+                num_levels=20
+            else:
+                num_levels=19
+        elif isinstance(num_levels, int) & (num_levels<=1 or num_levels>256):
+            num_levels = 20
+        elif not isinstance(num_levels, int):
+            num_levels = 20
 
     if ax is None:
         ax = plt.gca()
@@ -463,7 +467,8 @@ def kdeplot(
     z_masked = np.where(z < threshold * z_max, np.nan, z)
 
     # Define discrete levels
-    levels = np.linspace(threshold * z_max, z_max, num_levels)
+    if levels==None:
+        levels = np.linspace(threshold * z_max, z_max, num_levels)
 
     # Use either the colors or cmap
     if color==None:
@@ -485,7 +490,8 @@ def kdeplot(
     # add colorbar
     if cbar and cmap != None:
         if scale_kde:
-            levels = np.linspace(threshold, 1.0, num_levels)
+            if levels==None:
+                levels = np.linspace(threshold, 1.0, num_levels)
             if num_levels<22:
                 cbar = plt.colorbar(contour, ax=ax, ticks=levels)
             else:
