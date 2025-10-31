@@ -163,8 +163,8 @@ contour = kde_contour(
     x,
     y,
     ax=ax,
-    threshold=0.001,
     scale_kde=True,
+    threshold=0.001,
     cmap='turbo',
     grid_size=1000,
     num_levels=21
@@ -214,6 +214,7 @@ plt.scatter(
 kde_contour(
     x=iris['sepal_width'],
     y=iris['sepal_length'],
+    scale_kde=True,
     levels=[.05, .10, .25, .5, .75, .9, .95],
     fill=False,
     color='black',
