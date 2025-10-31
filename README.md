@@ -159,18 +159,15 @@ textstr = (
 # ----- Use kde_contour for bivariate KDE contour plot, and overlay it with the regression results ----
 # -----
 fig, ax = plt.subplots(figsize=(10, 6))
-num_levels=21
-threshold=0.001
-scale_kde = True
 contour = kde_contour(
     x,
     y,
     ax=ax,
-    threshold=threshold,
-    scale_kde=scale_kde,
+    threshold=0.001,
+    scale_kde=True,
     cmap='turbo',
     grid_size=1000,
-    num_levels=num_levels
+    num_levels=21
 )
 
 plt.plot(x_new, d['y_new'], color='red', label=f'Regression Best Fit')
