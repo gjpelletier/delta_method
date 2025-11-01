@@ -1,5 +1,7 @@
 function contourHandle = kde_contour(x, y, varargin)
-% Add a scaled KDE plot to a figure as contourf or contour plot in MATLAB
+% Add a scaled bivariate KDE plot to a figure as contourf or contour plot in MATLAB
+% Using MATLABS mvksdensity kernel smoothing function estimate for multivariate data
+% Requires MATLAB Statsitics and Machine Learning Toolbox
 % by Greg Pelletier
 
 % % Example 1: filled contour plot of scaled bivariate KDE:
