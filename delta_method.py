@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.0.52"
+__version__ = "1.0.53"
 
 def delta_method(pcov,popt,x_new,f,x,y,alpha):
 
@@ -365,6 +365,7 @@ def parametric_bootstrap(popt,x_new,f,x,y,alpha,trials):
 def kde_contour(
     x, y,
     ax=None,
+    bw_method=None,
     threshold=0.001,
     scale_kde=True,
     num_levels=None,
@@ -390,11 +391,20 @@ def kde_contour(
 ):
     """
     Add a scaled KDE plot as contourf or contour plot object in a matplotlib figure
+    using scipy.stats.guassian_kde to calculate kernel density estimates for bivariate data
+
     by Greg Pelletier (gjpelletier@gmail.com)
 
     Parameters:
     - x, y: 1D arrays of data points
     - ax: matplotlib Axes object (optional). If None, uses current axes.
+    - bw_method: str, scalar or callable, optional, for use with scipy.stats.guassian_kde
+        The method used to calculate the bandwidth factor. 
+        This can be ‘scott’, ‘silverman’, a scalar constant or a callable. 
+        If a scalar, this will be used directly as factor. 
+        If a callable, it should take a gaussian_kde instance 
+        as only parameter and return a scalar. 
+        If None (default), ‘scott’ is used. 
     - threshold: float, values below this threshold (relative to max KDE) are masked (default 0.001)
     - scale_kde: bool, whether to scale KDE values to [0, 1] (default True)
     - num_levels: int, number of discrete color levels
@@ -495,7 +505,7 @@ def kde_contour(
     grid_coords = np.vstack([xx.ravel(), yy.ravel()])
 
     # Compute KDE
-    kde = gaussian_kde(np.vstack([x, y]))
+    kde = gaussian_kde(np.vstack([x, y]), bw_method=bw_method)
     z = kde(grid_coords).reshape(xx.shape)
 
     # Scale KDE to [0, 1] if requested
