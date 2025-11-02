@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.0.46"
+__version__ = "1.0.47"
 
 def delta_method(pcov,popt,x_new,f,x,y,alpha):
 
@@ -372,7 +372,7 @@ def kde_contour(
     lines=None,
     lines_color=None,
     color=None,
-    cmap='turbo',
+    cmap='Blues',
     cbar=True,
     cbar_fontsize=10,
     cbar_fmt='%.2f',
@@ -381,7 +381,7 @@ def kde_contour(
     num_levels=None,
     linewidths=1,
     linestyles='solid',
-    clabel=False,
+    clabel=True,
     clabel_fontsize=8,
     clabel_fmt='%.2f',
     **kwargs
@@ -406,7 +406,7 @@ def kde_contour(
     - cbar_fmt: string format of colorbar tick labels (default '%.2f')
     - grid_size: int, resolution of meshgrid (default 200)
     - levels: int, list, or array-like, number and positions of the contour lines / regions
-    - num_levels: int, number of discrete color levels (default 11)
+    - num_levels: int, number of discrete color levels
     - linewidths: float, contour line widths if fill=False (default 1)
     - linestyles: contour line style if fill=False  
         'solid' (default) 'dashed', 'dashdot', 'dotted'
@@ -511,15 +511,23 @@ def kde_contour(
 
     # Use either the colors or cmap
     if color==None:
-        cmap = plt.get_cmap(cmap, num_levels)
+        if fill:
+            cmap = plt.get_cmap(cmap, num_levels)
+        else:
+            color='black'
+            cmap=None
     else:
         cmap = None
 
     if fill:
+        if lines!=None and alpha==None:
+            alpha=0.5            
         contour = ax.contourf(xx, yy, z_masked, 
             levels=levels, colors=color, cmap=cmap, alpha=alpha, antialiased=True, **kwargs)
         if lines != None:
             # Add contour lines to the contourf
+            if lines_color==None:
+                lines_color='black'
             contour_lines = ax.contour(xx, yy, z_masked, 
                 levels=lines, colors=lines_color, 
                 linewidths=linewidths, linestyles=linestyles, **kwargs)
