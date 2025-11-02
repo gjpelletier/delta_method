@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.0.49"
+__version__ = "1.0.50"
 
 def delta_method(pcov,popt,x_new,f,x,y,alpha):
 
@@ -529,7 +529,10 @@ def kde_contour(
             if lines_color==None:
                 lines_color='black'
             if lines_scaled:
-                lines = lines * z.max()    
+                if isinstance(lines, list):
+                    lines = [x * z.max() for x in lines]
+                else:
+                    lines = lines * z.max()    
             contour_lines = ax.contour(xx, yy, z_masked, 
                 levels=lines, colors=lines_color, 
                 linewidths=linewidths, linestyles=linestyles, **kwargs)
