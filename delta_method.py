@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.0.45"
+__version__ = "1.0.46"
 
 def delta_method(pcov,popt,x_new,f,x,y,alpha):
 
@@ -368,6 +368,9 @@ def kde_contour(
     threshold=0.001,
     scale_kde=True,
     fill=True,
+    alpha=1,
+    lines=None,
+    lines_color=None,
     color=None,
     cmap='turbo',
     cbar=True,
@@ -393,6 +396,9 @@ def kde_contour(
     - threshold: float, values below this threshold (relative to max KDE) are masked (default 0.001)
     - scale_kde: bool, whether to scale KDE values to [0, 1] (default True)
     - fill: bool, whether to use contourf (True) or contour (False)
+    - alpha: float 0-1, alpha transparency of the fill for contourf
+    - lines: int, list, or array-like, levels of the contour lines over contourf
+    - lines_color: color of the contour lines over contourf (default None))
     - color: colors of the levels, i.e. the lines for contour and the areas for contourf (default None))
     - cmap: str, colormap name (default 'turbo')
     - cbar: bool, whether to show a colorbar for the plot (default True if cmap is used)
@@ -408,6 +414,33 @@ def kde_contour(
     - clabel_fontsize: float, font size for contour line labels (default 8),
     - clabel_fmt: string format of contour line labels (default '%.2f')
     - kwargs: additional keyword arguments passed to plt.contourf
+
+    Returns contourf or contour plot object for matplotlib figure
+    
+    Exampe usage:
+    
+        import seaborn as sns
+        import matplotlib.pyplot as plt
+        from delta_method import kde_contour
+
+        iris = sns.load_dataset("iris")
+        kde_contour(
+            x=iris['sepal_width'],
+            y=iris['sepal_length'],
+            scale_kde=True,
+            levels=[.05, .10, .25, .5, .75, .9, .95],
+            fill=False,
+            color='black',
+            cbar=False,
+            clabel=True,
+            clabel_fontsize=8,
+        )
+
+        plt.title('Scaled KDE contours of iris sepal_length vs. sepal_width')
+        plt.xlabel('sepal_width')
+        plt.ylabel('sepal_length')
+        plt.show()
+
     """
 
     import numpy as np
@@ -428,6 +461,9 @@ def kde_contour(
 
     if x.size == 0 or y.size == 0:
         raise ValueError("Input arrays must contain at least one non-NaN value after filtering.")
+
+    if fill and num_levels==None and levels==None and lines!=None:
+        num_levels=256
 
     if levels==None:
         if num_levels==None:
@@ -481,7 +517,15 @@ def kde_contour(
 
     if fill:
         contour = ax.contourf(xx, yy, z_masked, 
-            levels=levels, colors=color, cmap=cmap, **kwargs)
+            levels=levels, colors=color, cmap=cmap, alpha=alpha, antialiased=True, **kwargs)
+        if lines != None:
+            # Add contour lines to the contourf
+            contour_lines = ax.contour(xx, yy, z_masked, 
+                levels=lines, colors=lines_color, 
+                linewidths=linewidths, linestyles=linestyles, **kwargs)
+            if clabel:
+                # Add labels to the contour lines
+                plt.clabel(contour_lines, inline=True, fontsize=clabel_fontsize, fmt=clabel_fmt)
     else:
         contour = ax.contour(xx, yy, z_masked, 
             levels=levels, colors=color, cmap=cmap, 
@@ -497,7 +541,7 @@ def kde_contour(
                 cbar = plt.colorbar(contour, ax=ax, ticks=levels)
             else:
                 cbar = plt.colorbar(contour, ax=ax)
-            cbar.set_label('Scaled KDE (0–1)', fontsize=cbar_fontsize)
+            cbar.set_label('Scaled KDE (0-1)', fontsize=cbar_fontsize)
             cbar.ax.yaxis.set_major_formatter(FormatStrFormatter(cbar_fmt))
         else:
             cbar = plt.colorbar(contour, ax=ax, label='KDE')
