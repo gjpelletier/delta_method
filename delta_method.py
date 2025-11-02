@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.0.48"
+__version__ = "1.0.49"
 
 def delta_method(pcov,popt,x_new,f,x,y,alpha):
 
@@ -371,6 +371,7 @@ def kde_contour(
     alpha=1,
     lines=None,
     lines_color=None,
+    lines_scaled=True,
     color=None,
     cmap='Blues',
     cbar=True,
@@ -399,6 +400,7 @@ def kde_contour(
     - alpha: float 0-1, alpha transparency of the fill for contourf
     - lines: int, list, or array-like, levels of the contour lines over contourf
     - lines_color: color of the contour lines over contourf (default None))
+    - lines_scaled: bool, whether to convert the input lines values to unscaled KDE if scale_KDE=False
     - color: colors of the levels, i.e. the lines for contour and the areas for contourf (default None))
     - cmap: str, colormap name (default 'turbo')
     - cbar: bool, whether to show a colorbar for the plot (default True if cmap is used)
@@ -526,6 +528,8 @@ def kde_contour(
             # Add contour lines to the contourf
             if lines_color==None:
                 lines_color='black'
+            if lines_scaled:
+                lines = lines * z.max()    
             contour_lines = ax.contour(xx, yy, z_masked, 
                 levels=lines, colors=lines_color, 
                 linewidths=linewidths, linestyles=linestyles, **kwargs)
