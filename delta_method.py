@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.0.51"
+__version__ = "1.0.52"
 
 def delta_method(pcov,popt,x_new,f,x,y,alpha):
 
@@ -367,19 +367,20 @@ def kde_contour(
     ax=None,
     threshold=0.001,
     scale_kde=True,
-    fill=True,
-    alpha=1,
+    num_levels=None,
+    levels=None,
+    levels_scaled=True,
     lines=None,
-    lines_color=None,
     lines_scaled=True,
+    lines_color=None,
     color=None,
+    fill=True,
     cmap='Blues',
+    alpha=1,
     cbar=True,
     cbar_fontsize=10,
     cbar_fmt='%.2f',
     grid_size=200,
-    levels=None,
-    num_levels=None,
     linewidths=1,
     linestyles='solid',
     clabel=True,
@@ -396,19 +397,20 @@ def kde_contour(
     - ax: matplotlib Axes object (optional). If None, uses current axes.
     - threshold: float, values below this threshold (relative to max KDE) are masked (default 0.001)
     - scale_kde: bool, whether to scale KDE values to [0, 1] (default True)
-    - fill: bool, whether to use contourf (True) or contour (False)
-    - alpha: float 0-1, alpha transparency of the fill for contourf
+    - num_levels: int, number of discrete color levels
+    - levels: int, list, or array-like, number and positions of the contour lines / regions
+    - levels_scaled: bool, whether to convert the input levels values to unscaled KDE if scale_KDE=False
     - lines: int, list, or array-like, levels of the contour lines over contourf
-    - lines_color: color of the contour lines over contourf (default None))
     - lines_scaled: bool, whether to convert the input lines values to unscaled KDE if scale_KDE=False
+    - lines_color: color of the contour lines over contourf (default None))
     - color: colors of the levels, i.e. the lines for contour and the areas for contourf (default None))
+    - fill: bool, whether to use contourf (True) or contour (False)
     - cmap: str, colormap name (default 'turbo')
+    - alpha: float 0-1, alpha transparency of the fill for contourf
     - cbar: bool, whether to show a colorbar for the plot (default True if cmap is used)
     - cbar_fontsize: font size to use for colorbar label
     - cbar_fmt: string format of colorbar tick labels (default '%.2f')
     - grid_size: int, resolution of meshgrid (default 200)
-    - levels: int, list, or array-like, number and positions of the contour lines / regions
-    - num_levels: int, number of discrete color levels
     - linewidths: float, contour line widths if fill=False (default 1)
     - linestyles: contour line style if fill=False  
         'solid' (default) 'dashed', 'dashdot', 'dotted'
@@ -510,12 +512,11 @@ def kde_contour(
             levels = np.linspace(threshold, 1.0, num_levels)
         else:
             levels = np.linspace(threshold * z_max, z_max, num_levels)
-    else:
-        if lines_scaled:
-            if isinstance(levels, list):
-                levels = [x * z.max() for x in levels]
-            else:
-                levels = levels * z.max()    
+    elif levels_scaled and levels!=None:
+        if isinstance(levels, list):
+            levels = [x * z.max() for x in levels]
+        else:
+            levels = levels * z.max()    
 
     # Use either the colors or cmap
     if color==None:
