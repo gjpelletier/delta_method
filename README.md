@@ -227,13 +227,13 @@ plt.scatter(
 )
 
 plt.legend(loc='upper left')
-plt.title('Scaled KDE contours of iris sepal_length vs. sepal_width')
+plt.title('Scaled KDE contours (0-1) of iris sepal length vs. width')
 plt.xlabel('sepal_width')
 plt.ylabel('sepal_length')
 plt.savefig("kdeplot_iris_example.png", dpi=300)
 plt.show()
 ```
-<img width="1920" height="1440" alt="kdeplot_iris_example" src="https://github.com/user-attachments/assets/29375384-8866-4cc8-bf3a-fd72d27a2094" />
+<img width="1920" height="1440" alt="kdeplot_iris_example" src="https://github.com/user-attachments/assets/7150aa4b-6a8e-4b3c-b540-58001c8f4fd7" />
 
 # Acknowledgement
 
