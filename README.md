@@ -205,22 +205,24 @@ import matplotlib.pyplot as plt
 from delta_method import kde_contour
 
 iris = sns.load_dataset("iris")
-plt.scatter(
-    x=iris['sepal_width'],
-    y=iris['sepal_length'],
-    color='gray',
-    s=10
-)
 kde_contour(
     x=iris['sepal_width'],
     y=iris['sepal_length'],
     scale_kde=True,
-    levels=[.05, .10, .25, .5, .75, .9, .95],
-    fill=False,
-    color='black',
-    cbar=False,
+    fill=True,
+    alpha=.5,
+    cmap='Blues',
+    lines=[.05, .10, .25, .5, .75, .9, .95],
+    lines_color='black',
     clabel=True,
     clabel_fontsize=8,
+    cbar=False,
+)
+plt.scatter(
+    x=iris['sepal_width'],
+    y=iris['sepal_length'],
+    color='black',
+    s=10,
 )
 
 plt.title('Scaled KDE contours of iris sepal_length vs. sepal_width')
@@ -229,7 +231,7 @@ plt.ylabel('sepal_length')
 plt.savefig("kdeplot_iris_example.png", dpi=300)
 plt.show()
 ```
-<img width="1920" height="1440" alt="kdeplot_iris_example" src="https://github.com/user-attachments/assets/02059729-4b4d-423e-84b9-33c2a83c9471" />
+<img width="1920" height="1440" alt="kdeplot_iris_example" src="https://github.com/user-attachments/assets/63ebc9ca-3941-46fc-8c34-492a541addfb" />
 
 # Acknowledgement
 
