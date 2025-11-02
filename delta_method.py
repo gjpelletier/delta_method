@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.0.50"
+__version__ = "1.0.51"
 
 def delta_method(pcov,popt,x_new,f,x,y,alpha):
 
@@ -510,6 +510,12 @@ def kde_contour(
             levels = np.linspace(threshold, 1.0, num_levels)
         else:
             levels = np.linspace(threshold * z_max, z_max, num_levels)
+    else:
+        if lines_scaled:
+            if isinstance(levels, list):
+                levels = [x * z.max() for x in levels]
+            else:
+                levels = levels * z.max()    
 
     # Use either the colors or cmap
     if color==None:
