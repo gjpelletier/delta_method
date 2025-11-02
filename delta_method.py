@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.0.47"
+__version__ = "1.0.48"
 
 def delta_method(pcov,popt,x_new,f,x,y,alpha):
 
@@ -520,8 +520,6 @@ def kde_contour(
         cmap = None
 
     if fill:
-        if lines!=None and alpha==None:
-            alpha=0.5            
         contour = ax.contourf(xx, yy, z_masked, 
             levels=levels, colors=color, cmap=cmap, alpha=alpha, antialiased=True, **kwargs)
         if lines != None:
