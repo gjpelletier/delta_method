@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.0.57"
+__version__ = "1.0.58"
 
 def delta_method(pcov,popt,x_new,f,x,y,alpha):
 
@@ -369,6 +369,7 @@ def kde_contour(
     weights=None,
     threshold=0.001,
     scale_kde=True,
+    scale_kde_is_percent=False,
     num_levels=None,
     levels=None,
     levels_scaled=True,
@@ -412,6 +413,7 @@ def kde_contour(
         If None (default), the samples are assumed to be equally weighted
     - threshold: float, values below this threshold (relative to max KDE) are masked (default 0.001)
     - scale_kde: bool, whether to scale KDE values to [0, 1] (default True)
+    - scale_kde_is_percent: bool, whether to convert scaled KDE values to percent to [0, 100] (default False)
     - num_levels: int, number of discrete color levels
     - levels: int, list, or array-like, number and positions of the contour lines / regions
     - levels_scaled: bool, whether to convert the input levels values to unscaled KDE if scale_KDE=False
@@ -528,6 +530,9 @@ def kde_contour(
     # Scale KDE to [0, 1] if requested
     if scale_kde:
         z = (z - z.min()) / (z.max() - z.min())
+        if scale_kde_is_percent:
+            # convert scaled KDE to percent [0, 100]
+            z = z * 100
 
     # Apply threshold mask
     z_max = z.max()
