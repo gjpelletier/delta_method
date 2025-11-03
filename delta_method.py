@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.0.54"
+__version__ = "1.0.55"
 
 def delta_method(pcov,popt,x_new,f,x,y,alpha):
 
@@ -474,7 +474,11 @@ def kde_contour(
     if x.shape != y.shape:
         raise ValueError(f"x and y must be broadcastable to the same shape. Got shapes {x.shape} and {y.shape}.")
 
-    if weights!=None:
+    if weights==None:
+        mask = ~np.isnan(x) & ~np.isnan(y)
+        x = x[mask]
+        y = y[mask]
+    else:
         weights = np.asarray(weights).ravel()
         if weights.shape != x.shape:
             raise ValueError(f"weights must be broadcastable to the same shape as x and y. Got shapes {x.shape}, {y.shape}, and {weights.shape} for x, y, and weights.")
@@ -482,10 +486,6 @@ def kde_contour(
         x = x[mask]
         y = y[mask]
         weights = weights[mask]
-    else:
-        mask = ~np.isnan(x) & ~np.isnan(y)
-        x = x[mask]
-        y = y[mask]
 
     if x.size == 0 or y.size == 0:
         raise ValueError("Input arrays must contain at least one non-NaN value after filtering.")
