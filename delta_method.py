@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.0.58"
+__version__ = "1.0.59"
 
 def delta_method(pcov,popt,x_new,f,x,y,alpha):
 
@@ -492,13 +492,10 @@ def kde_contour(
     if x.size == 0 or y.size == 0:
         raise ValueError("Input arrays must contain at least one non-NaN value after filtering.")
 
-    # if fill and num_levels==None and levels==None and lines!=None:
     if fill and num_levels is None and levels is None and lines is not None:
         num_levels=256
 
-    # if levels==None:
     if levels is None:
-        # if num_levels==None:
         if num_levels is None:
             if threshold<0.05:
                 num_levels=21
@@ -539,13 +536,14 @@ def kde_contour(
     z_masked = np.where(z < threshold * z_max, np.nan, z)
 
     # Define discrete levels
-    # if levels==None:
     if levels is None:
         if scale_kde:
-            levels = np.linspace(threshold, 1.0, num_levels)
+            if scale_kde_is_percent:
+                levels = np.linspace(threshold, 100.0, num_levels)
+            else:
+                levels = np.linspace(threshold, 1.0, num_levels)
         else:
             levels = np.linspace(threshold * z_max, z_max, num_levels)
-    # elif levels_scaled and levels!=None:
     elif levels_scaled and levels is not None:
         if isinstance(levels, list):
             levels = [x * z.max() for x in levels]
@@ -553,7 +551,6 @@ def kde_contour(
             levels = levels * z.max()    
 
     # Use either the colors or cmap
-    # if color==None:
     if color is None:
         if fill:
             cmap = plt.get_cmap(cmap, num_levels)
@@ -566,10 +563,8 @@ def kde_contour(
     if fill:
         contour = ax.contourf(xx, yy, z_masked, 
             levels=levels, colors=color, cmap=cmap, alpha=alpha, antialiased=True, **kwargs)
-        # if lines != None:
         if lines is not None:
             # Add contour lines to the contourf
-            # if lines_color==None:
             if lines_color is None:
                 lines_color='black'
             if lines_scaled:
@@ -592,14 +587,16 @@ def kde_contour(
             plt.clabel(contour, inline=True, fontsize=clabel_fontsize, fmt=clabel_fmt)
 
     # add colorbar
-    # if cbar and cmap != None:
     if cbar and cmap is not None:
         if scale_kde:
             if num_levels<22:
                 cbar = plt.colorbar(contour, ax=ax, ticks=levels)
             else:
                 cbar = plt.colorbar(contour, ax=ax)
-            cbar.set_label('Scaled KDE (0-1)', fontsize=cbar_fontsize)
+            if scale_kde_is_percent:
+                cbar.set_label('Scaled KDE (0-100)', fontsize=cbar_fontsize)
+            else:
+                cbar.set_label('Scaled KDE (0-1)', fontsize=cbar_fontsize)                
             cbar.ax.yaxis.set_major_formatter(FormatStrFormatter(cbar_fmt))
         else:
             cbar = plt.colorbar(contour, ax=ax, label='KDE')
