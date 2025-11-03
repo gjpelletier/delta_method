@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.0.53"
+__version__ = "1.0.54"
 
 def delta_method(pcov,popt,x_new,f,x,y,alpha):
 
@@ -366,6 +366,7 @@ def kde_contour(
     x, y,
     ax=None,
     bw_method=None,
+    weights=None,
     threshold=0.001,
     scale_kde=True,
     num_levels=None,
@@ -380,7 +381,7 @@ def kde_contour(
     alpha=1,
     cbar=True,
     cbar_fontsize=10,
-    cbar_fmt='%.2f',
+    cbar_fmt='%.3f',
     grid_size=200,
     linewidths=1,
     linestyles='solid',
@@ -405,6 +406,10 @@ def kde_contour(
         If a callable, it should take a gaussian_kde instance 
         as only parameter and return a scalar. 
         If None (default), ‘scott’ is used. 
+    - weights: 1D array, optional, same size/shape as x and y data
+        weights of datapoints for use with scipy.stats.guassian_kde. 
+        This must be the same shape as dataset x and y. 
+        If None (default), the samples are assumed to be equally weighted
     - threshold: float, values below this threshold (relative to max KDE) are masked (default 0.001)
     - scale_kde: bool, whether to scale KDE values to [0, 1] (default True)
     - num_levels: int, number of discrete color levels
@@ -469,9 +474,18 @@ def kde_contour(
     if x.shape != y.shape:
         raise ValueError(f"x and y must be broadcastable to the same shape. Got shapes {x.shape} and {y.shape}.")
 
-    mask = ~np.isnan(x) & ~np.isnan(y)
-    x = x[mask]
-    y = y[mask]
+    if weights!=None:
+        weights = np.asarray(weights).ravel()
+        if weights.shape != x.shape:
+            raise ValueError(f"weights must be broadcastable to the same shape as x and y. Got shapes {x.shape}, {y.shape}, and {weights.shape} for x, y, and weights.")
+        mask = ~np.isnan(x) & ~np.isnan(y) & ~np.isnan(weights) 
+        x = x[mask]
+        y = y[mask]
+        weights = weights[mask]
+    else:
+        mask = ~np.isnan(x) & ~np.isnan(y)
+        x = x[mask]
+        y = y[mask]
 
     if x.size == 0 or y.size == 0:
         raise ValueError("Input arrays must contain at least one non-NaN value after filtering.")
@@ -505,7 +519,7 @@ def kde_contour(
     grid_coords = np.vstack([xx.ravel(), yy.ravel()])
 
     # Compute KDE
-    kde = gaussian_kde(np.vstack([x, y]), bw_method=bw_method)
+    kde = gaussian_kde(np.vstack([x, y]), bw_method=bw_method, weights=weights)
     z = kde(grid_coords).reshape(xx.shape)
 
     # Scale KDE to [0, 1] if requested
