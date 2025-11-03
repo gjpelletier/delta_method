@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.0.56"
+__version__ = "1.0.57"
 
 def delta_method(pcov,popt,x_new,f,x,y,alpha):
 
@@ -381,7 +381,7 @@ def kde_contour(
     alpha=1,
     cbar=True,
     cbar_fontsize=10,
-    cbar_fmt='%.3f',
+    cbar_fmt='%.2f',
     grid_size=200,
     linewidths=1,
     linestyles='solid',
