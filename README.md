@@ -23,7 +23,7 @@ pip install git+https://github.com/gjpelletier/delta_method.git --upgrade
 
 Next import the delta_method and parametric_bootstrap functions as follows in your notebook or python code:<br>
 ```
-from delta_method import delta_method, parametric_bootstrap
+from delta_method import delta_method, parametric_bootstrap, kde_contour
 ```
 
 ## Installation for MATLAB
