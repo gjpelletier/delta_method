@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.0.59"
+__version__ = "1.0.60"
 
 def delta_method(pcov,popt,x_new,f,x,y,alpha):
 
@@ -369,7 +369,6 @@ def kde_contour(
     weights=None,
     threshold=0.001,
     scale_kde=True,
-    scale_kde_is_percent=False,
     num_levels=None,
     levels=None,
     levels_scaled=True,
@@ -380,6 +379,7 @@ def kde_contour(
     fill=True,
     cmap='Blues',
     alpha=1,
+    antialiased=False,
     cbar=True,
     cbar_fontsize=10,
     cbar_fmt='%.2f',
@@ -389,6 +389,8 @@ def kde_contour(
     clabel=True,
     clabel_fontsize=8,
     clabel_fmt='%.2f',
+    plt_show=False,
+    plt_close=False,
     **kwargs
 ):
     """
@@ -413,7 +415,6 @@ def kde_contour(
         If None (default), the samples are assumed to be equally weighted
     - threshold: float, values below this threshold (relative to max KDE) are masked (default 0.001)
     - scale_kde: bool, whether to scale KDE values to [0, 1] (default True)
-    - scale_kde_is_percent: bool, whether to convert scaled KDE values to percent to [0, 100] (default False)
     - num_levels: int, number of discrete color levels
     - levels: int, list, or array-like, number and positions of the contour lines / regions
     - levels_scaled: bool, whether to convert the input levels values to unscaled KDE if scale_KDE=False
@@ -424,6 +425,7 @@ def kde_contour(
     - fill: bool, whether to use contourf (True) or contour (False)
     - cmap: str, colormap name (default 'turbo')
     - alpha: float 0-1, alpha transparency of the fill for contourf
+    - antialiased: bool, enable antialiasing in contourf
     - cbar: bool, whether to show a colorbar for the plot (default True if cmap is used)
     - cbar_fontsize: font size to use for colorbar label
     - cbar_fmt: string format of colorbar tick labels (default '%.2f')
@@ -434,6 +436,8 @@ def kde_contour(
     - clabel: bool, whether to add labels to contour lines, used if fill=False
     - clabel_fontsize: float, font size for contour line labels (default 8),
     - clabel_fmt: string format of contour line labels (default '%.2f')
+    - plt_show: bool, whether to show the plot (default False)
+    - plt_close: bool, whether to close the plot to suppress showing the plot (default False)
     - kwargs: additional keyword arguments passed to plt.contourf
 
     Returns contourf or contour plot object for matplotlib figure
@@ -527,9 +531,6 @@ def kde_contour(
     # Scale KDE to [0, 1] if requested
     if scale_kde:
         z = (z - z.min()) / (z.max() - z.min())
-        if scale_kde_is_percent:
-            # convert scaled KDE to percent [0, 100]
-            z = z * 100
 
     # Apply threshold mask
     z_max = z.max()
@@ -538,10 +539,7 @@ def kde_contour(
     # Define discrete levels
     if levels is None:
         if scale_kde:
-            if scale_kde_is_percent:
-                levels = np.linspace(threshold, 100.0, num_levels)
-            else:
-                levels = np.linspace(threshold, 1.0, num_levels)
+            levels = np.linspace(threshold, 1.0, num_levels)
         else:
             levels = np.linspace(threshold * z_max, z_max, num_levels)
     elif levels_scaled and levels is not None:
@@ -560,9 +558,25 @@ def kde_contour(
     else:
         cmap=None
 
+    # convert lines to list if needed
+    if lines is not None and not isinstance(lines, list):
+        if isinstance(lines, np.ndarray):
+            lines = lines.tolist()
+        else:
+            lines = [lines]
+
+    # convert levels to list if needed
+    if levels is not None and not isinstance(levels, list):
+        if isinstance(levels, np.ndarray):
+            levels = levels.tolist()
+        else:
+            levels = [levels]
+
     if fill:
+        # filled contourf withot or with contour lines added
         contour = ax.contourf(xx, yy, z_masked, 
-            levels=levels, colors=color, cmap=cmap, alpha=alpha, antialiased=True, **kwargs)
+            levels=levels, colors=color, cmap=cmap, alpha=alpha, 
+            linewidths=0, linestyles=None, antialiased=antialiased, **kwargs)
         if lines is not None:
             # Add contour lines to the contourf
             if lines_color is None:
@@ -572,19 +586,41 @@ def kde_contour(
                     lines = [x * z.max() for x in lines]
                 else:
                     lines = lines * z.max()    
-            contour_lines = ax.contour(xx, yy, z_masked, 
-                levels=lines, colors=lines_color, 
-                linewidths=linewidths, linestyles=linestyles, **kwargs)
-            if clabel:
-                # Add labels to the contour lines
-                plt.clabel(contour_lines, inline=True, fontsize=clabel_fontsize, fmt=clabel_fmt)
+            if isinstance(clabel_fmt, list) and len(clabel_fmt)==len(lines):
+                contour_lines = []    # initialize list of contour handles
+
+                for i, level in enumerate(lines):
+                    contour_i = ax.contour(xx, yy, z_masked, 
+                        levels=[level], colors=lines_color, cmap=None, 
+                        linewidths=linewidths, linestyles=linestyles, **kwargs)
+                    contour_lines.append(contour_i)  # Append the contour handle to the list
+                    if clabel:
+                        plt.clabel(contour_i, inline=True, fontsize=clabel_fontsize, fmt=clabel_fmt[i])
+            else:
+                contour_lines = ax.contour(xx, yy, z_masked, 
+                    levels=lines, colors=lines_color, 
+                    linewidths=linewidths, linestyles=linestyles, **kwargs)
+                if clabel:
+                    # Add labels to the contour lines
+                    plt.clabel(contour_lines, inline=True, fontsize=clabel_fontsize, fmt=clabel_fmt)
     else:
-        contour = ax.contour(xx, yy, z_masked, 
+        # unfilled contour lines
+        if isinstance(clabel_fmt, list) and len(clabel_fmt)==len(levels):
+            contour = []    # initialize list of contour handles
+            for i, level in enumerate(levels):
+                contour_i = ax.contour(xx, yy, z_masked, 
+                    levels=[level], colors=color, cmap=cmap, 
+                    linewidths=linewidths, linestyles=linestyles, **kwargs)
+                contour.append(contour_i)  # Append the contour handle to the list
+                if clabel:
+                    plt.clabel(contour_i, inline=True, fontsize=clabel_fontsize, fmt=clabel_fmt[i])
+        else:
+            contour = ax.contour(xx, yy, z_masked, 
             levels=levels, colors=color, cmap=cmap, 
             linewidths=linewidths, linestyles=linestyles, **kwargs)
-        if clabel:
-            # Add labels to the contour lines
-            plt.clabel(contour, inline=True, fontsize=clabel_fontsize, fmt=clabel_fmt)
+            if clabel:
+                # Add labels to the contour lines
+                plt.clabel(contour, inline=True, fontsize=clabel_fontsize, fmt=clabel_fmt)
 
     # add colorbar
     if cbar and cmap is not None:
@@ -593,13 +629,16 @@ def kde_contour(
                 cbar = plt.colorbar(contour, ax=ax, ticks=levels)
             else:
                 cbar = plt.colorbar(contour, ax=ax)
-            if scale_kde_is_percent:
-                cbar.set_label('Scaled KDE (0-100)', fontsize=cbar_fontsize)
-            else:
-                cbar.set_label('Scaled KDE (0-1)', fontsize=cbar_fontsize)                
+            cbar.set_label('Scaled KDE (0-1)', fontsize=cbar_fontsize)                
             cbar.ax.yaxis.set_major_formatter(FormatStrFormatter(cbar_fmt))
         else:
             cbar = plt.colorbar(contour, ax=ax, label='KDE')
             cbar.set_label('KDE', fontsize=cbar_fontsize)
+
+    if plt_show:
+        plt.show()
+
+    if plt_close:
+        plt.close()
 
     return contour
