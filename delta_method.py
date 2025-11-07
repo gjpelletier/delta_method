@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.0.62"
+__version__ = "1.0.63"
 
 def delta_method(pcov,popt,x_new,f,x,y,alpha):
 
@@ -655,7 +655,7 @@ def quantile_contour(
     ax=None,
     target_masses = [0.1, 0.5, 0.9, 0.99, 0.999],
     grid_size=200, 
-    inside_contour=False,
+    inside=True,
     linewidths=1,
     linestyles='solid',
     colors='black',
@@ -689,7 +689,7 @@ def quantile_contour(
         and 90% of the data mass is outside of the KDE contour correspondng to target_masses=0.1
         (default target_masses=[0.1, 0.5, 0.9, 0.99, 0.999])
     - grid_size: number of evenly spaced grid points for the mesh in each dimension x and y 
-    - inside_contour: bool, whether the contour is labeled as data density probability inside or outside of contour
+    - inside: bool, whether the contour is labeled as the quantile of data inside or outside of the contour
     - linewidths: float, contour line widths if fill=False (default 1)
     - linestyles: contour line style if fill=False  
         'solid' (default) 'dashed', 'dashdot', 'dotted'
@@ -812,7 +812,7 @@ def quantile_contour(
         contour_i = ax.contour(xx, yy, zz, levels=[thresh], linewidths=linewidths,
                     linestyles=linestyles, colors=colors, alpha=alpha)
         if clabel:
-            if inside_contour:
+            if inside:
                 # data mass fraction (0-1) inside of each contour
                 if mass>=.999:
                     fmt = {thresh: f"{mass:.3f}"}
