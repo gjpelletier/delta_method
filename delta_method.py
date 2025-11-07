@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.0.60"
+__version__ = "1.0.61"
 
 def delta_method(pcov,popt,x_new,f,x,y,alpha):
 
@@ -364,11 +364,11 @@ def parametric_bootstrap(popt,x_new,f,x,y,alpha,trials):
     
 def kde_contour(
     x, y,
-    ax=None,
-    bw_method=None,
     weights=None,
+    bw_method=None,
+    ax=None,
     threshold=0.001,
-    scale_kde=True,
+    scale_kde=False,
     num_levels=None,
     levels=None,
     levels_scaled=True,
@@ -401,7 +401,10 @@ def kde_contour(
 
     Parameters:
     - x, y: 1D arrays of data points
-    - ax: matplotlib Axes object (optional). If None, uses current axes.
+    - weights: 1D array, optional, same size/shape as x and y data
+        weights of datapoints for use with scipy.stats.guassian_kde. 
+        This must be the same shape as dataset x and y. 
+        If None (default), the samples are assumed to be equally weighted
     - bw_method: str, scalar or callable, optional, for use with scipy.stats.guassian_kde
         The method used to calculate the bandwidth factor. 
         This can be ‘scott’, ‘silverman’, a scalar constant or a callable. 
@@ -409,10 +412,7 @@ def kde_contour(
         If a callable, it should take a gaussian_kde instance 
         as only parameter and return a scalar. 
         If None (default), ‘scott’ is used. 
-    - weights: 1D array, optional, same size/shape as x and y data
-        weights of datapoints for use with scipy.stats.guassian_kde. 
-        This must be the same shape as dataset x and y. 
-        If None (default), the samples are assumed to be equally weighted
+    - ax: matplotlib Axes object (optional). If None, uses current axes.
     - threshold: float, values below this threshold (relative to max KDE) are masked (default 0.001)
     - scale_kde: bool, whether to scale KDE values to [0, 1] (default True)
     - num_levels: int, number of discrete color levels
@@ -501,12 +501,15 @@ def kde_contour(
 
     if levels is None:
         if num_levels is None:
-            if threshold<0.05:
-                num_levels=21
-            elif threshold<0.1:
-                num_levels=20
+            if scale_kde:
+                if threshold<0.05:
+                    num_levels=21
+                elif threshold<0.1:
+                    num_levels=20
+                else:
+                    num_levels=19
             else:
-                num_levels=19
+                num_levels=256
         elif isinstance(num_levels, int) & (num_levels<=1 or num_levels>256):
             num_levels = 20
         elif not isinstance(num_levels, int):
@@ -595,14 +598,15 @@ def kde_contour(
                         linewidths=linewidths, linestyles=linestyles, **kwargs)
                     contour_lines.append(contour_i)  # Append the contour handle to the list
                     if clabel:
-                        plt.clabel(contour_i, inline=True, fontsize=clabel_fontsize, fmt=clabel_fmt[i])
+                        # plt.clabel(contour_i, inline=True, fontsize=clabel_fontsize, fmt=clabel_fmt[i])
+                        ax.clabel(contour_i, inline=True, fontsize=clabel_fontsize, fmt=clabel_fmt[i])
             else:
                 contour_lines = ax.contour(xx, yy, z_masked, 
                     levels=lines, colors=lines_color, 
                     linewidths=linewidths, linestyles=linestyles, **kwargs)
                 if clabel:
-                    # Add labels to the contour lines
-                    plt.clabel(contour_lines, inline=True, fontsize=clabel_fontsize, fmt=clabel_fmt)
+                    # plt.clabel(contour_lines, inline=True, fontsize=clabel_fontsize, fmt=clabel_fmt)
+                    ax.clabel(contour_lines, inline=True, fontsize=clabel_fontsize, fmt=clabel_fmt)
     else:
         # unfilled contour lines
         if isinstance(clabel_fmt, list) and len(clabel_fmt)==len(levels):
@@ -613,14 +617,15 @@ def kde_contour(
                     linewidths=linewidths, linestyles=linestyles, **kwargs)
                 contour.append(contour_i)  # Append the contour handle to the list
                 if clabel:
-                    plt.clabel(contour_i, inline=True, fontsize=clabel_fontsize, fmt=clabel_fmt[i])
+                    # plt.clabel(contour_i, inline=True, fontsize=clabel_fontsize, fmt=clabel_fmt[i])
+                    ax.clabel(contour_i, inline=True, fontsize=clabel_fontsize, fmt=clabel_fmt[i])
         else:
             contour = ax.contour(xx, yy, z_masked, 
             levels=levels, colors=color, cmap=cmap, 
             linewidths=linewidths, linestyles=linestyles, **kwargs)
             if clabel:
-                # Add labels to the contour lines
-                plt.clabel(contour, inline=True, fontsize=clabel_fontsize, fmt=clabel_fmt)
+                # plt.clabel(contour, inline=True, fontsize=clabel_fontsize, fmt=clabel_fmt)
+                ax.clabel(contour, inline=True, fontsize=clabel_fontsize, fmt=clabel_fmt)
 
     # add colorbar
     if cbar and cmap is not None:
@@ -642,3 +647,197 @@ def kde_contour(
         plt.close()
 
     return contour
+
+def quantile_contour(
+    x, y,
+    weights=None,
+    bw_method=None,
+    ax=None,
+    target_masses = [0.1, 0.5, 0.9, 0.99, 0.999],
+    grid_size=200, 
+    inside_contour=False,
+    linewidths=1,
+    linestyles='solid',
+    colors='black',
+    alpha=1,
+    clabel=True,
+    clabel_fontsize=8,
+    plt_show=False,
+    plt_close=False,
+    verbose=False
+    ):
+
+    """
+    Quantile contours of bivariate data derived from Gaussian KDE thresholds integrated to enclose specified density mass
+
+        Args:
+    - x, y: 1D arrays of data points
+    - weights: 1D array, optional, same size/shape as x and y data
+        weights of datapoints for use with scipy.stats.guassian_kde. 
+        This must be the same shape as dataset x and y. 
+        If None (default), the samples are assumed to be equally weighted
+    - bw_method: str, scalar or callable, optional, for use with scipy.stats.guassian_kde
+        The method used to calculate the bandwidth factor. 
+        This can be 'scott', 'silverman', a scalar constant or a callable. 
+        If a scalar, this will be used directly as factor. 
+        If a callable, it should take a gaussian_kde instance 
+        as only parameter and return a scalar. 
+        If None (default), 'scott' is used. 
+    - ax: matplotlib Axes object (optional). If None, uses current axes.
+    - target_masses: list of probabilistic target data density masses that are enclosed within each contour
+        For example, 10% of the data mass is contained within the KDE contour corresponding to target_masses=0.1
+        and 90% of the data mass is outside of the KDE contour correspondng to target_masses=0.1
+        (default target_masses=[0.1, 0.5, 0.9, 0.99, 0.999])
+    - grid_size: number of evenly spaced grid points for the mesh in each dimension x and y 
+    - inside_contour: bool, whether the contour is labeled as data density probability inside or outside of contour
+    - linewidths: float, contour line widths if fill=False (default 1)
+    - linestyles: contour line style if fill=False  
+        'solid' (default) 'dashed', 'dashdot', 'dotted'
+    - colors: colors of the contour lines (default 'black')
+    - clabel: bool, whether to add labels to contour lines, used if fill=False
+    - clabel_fontsize: float, font size for contour line labels (default 8),
+    - clabel_fmt: string format of contour line labels (default '%.2f')
+    - plt_show: bool, whether to show the plot (default False)
+    - plt_close: bool, whether to close the plot to suppress showing the plot (default False)
+    - verbose: bool, whether to provide descriptive diagnostic outputs during execution 
+            
+    Method description:
+
+    To identify regions of high data concentration in multivariate space, we applied a grid-based KDE using a 
+    Gaussian kernel with bandwidth selected via Scott's rule (default). The KDE was evaluated over a uniform grid 
+    spanning the data domain, and the resulting density values were sorted in descending order. 
+    We then computed the cumulative density mass by integrating over grid cells, scaling the cumulative sum to unity. 
+    For each target mass (e.g., 0.05, 0.10, 0.25, …), we identified the KDE threshold corresponding 
+    to the smallest density value that enclosed the desired proportion of total mass. 
+    This threshold defines a contour level whose enclosed area contains the specified fraction of the data density, 
+    while the area outside the contour corresponds to the complementary fraction. 
+    
+    This approach aligns with a quantile matching strategy, where each contour level acts as a probabilistic boundary: 
+    for example, the 0.90 contour encloses approximately 90% of the data density, leaving 10% outside. 
+    Such contours are particularly useful for interpreting spatial distributions of oceanographic variables, 
+    identifying core regions of biological or physical activity, and delineating anomalous or peripheral zones.     
+    
+    Returns:
+    - contour_levels: dict of KDE levels mapping probabilistic target_masses -> KDE thresholds
+    """
+
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy.stats import gaussian_kde
+
+    if verbose:
+        print(f"Starting quantile_contour ...")
+
+    # Convert inputs to 1D arrays and remove NaNs
+    x = np.asarray(x).ravel()
+    y = np.asarray(y).ravel()
+
+    if x.shape != y.shape:
+        raise ValueError(f"x and y must be broadcastable to the same shape. Got shapes {x.shape} and {y.shape}.")
+
+    if weights is None:
+        mask = ~np.isnan(x) & ~np.isnan(y)
+        x = x[mask]
+        y = y[mask]
+    else:
+        weights = np.asarray(weights).ravel()
+        if weights.shape != x.shape:
+            raise ValueError(f"weights must be broadcastable to the same shape as x and y. Got shapes {x.shape}, {y.shape}, and {weights.shape} for x, y, and weights.")
+        mask = ~np.isnan(x) & ~np.isnan(y) & ~np.isnan(weights) 
+        x = x[mask]
+        y = y[mask]
+        weights = weights[mask]
+
+    if x.size == 0 or y.size == 0:
+        raise ValueError("Input arrays must contain at least one non-NaN value after filtering.")
+
+    if ax is None:
+        ax = plt.gca()
+
+    # convert taret_masses to list if needed
+    if target_masses is not None and not isinstance(target_masses, list):
+        if isinstance(target_masses, np.ndarray):
+            target_masses = target_masses.tolist()
+        else:
+            target_masses = [target_masses]
+
+    # Put x and y into a vstack array
+    data = np.vstack([x, y])
+
+    if verbose:
+        print(f"Finding bivariate KDE values for x,y ...")
+
+    # Find KDE values for x, y data
+    kde = gaussian_kde(data, bw_method=bw_method, weights=weights)
+
+    # Grid setup
+    mins = data.min(axis=1)
+    maxs = data.max(axis=1)    
+    grid_axes = [np.linspace(mins[d], maxs[d], grid_size) for d in range(data.shape[0])]
+    mesh = np.meshgrid(*grid_axes)
+    grid_points = np.vstack([m.ravel() for m in mesh])
+
+    # KDE evaluation
+    kde_vals = kde(grid_points)
+    cell_area = np.prod([(maxs[d] - mins[d]) / grid_size for d in range(data.shape[0])])
+    kde_vals_sorted = np.sort(kde_vals)[::-1]
+
+    # Cumulative mass and normalization
+    cumulative_mass = np.cumsum(kde_vals_sorted) * cell_area
+    total_mass = cumulative_mass[-1]
+    cumulative_mass /= total_mass  # Normalize to [0, 1]
+
+    if verbose:
+        print(f"Integrating target data mass quantiles at threshold KDE levels ...")
+
+    # Calculate contour levels
+    contour_levels = {}
+    for target in target_masses:
+        idx = np.searchsorted(cumulative_mass, target)
+        if idx >= len(kde_vals_sorted):
+            idx = len(kde_vals_sorted) - 1  # Clamp to max
+        threshold = kde_vals_sorted[idx]
+        contour_levels[target] = threshold
+        if verbose:
+            print(f"Target mass {target:.3f} → KDE threshold {threshold:.4e}")
+
+    if verbose:
+        print(f"Plotting ...")
+
+    # plot the probabilistic target_mass contours
+    xx = mesh[0]
+    yy = mesh[1]
+    zz = kde_vals.copy().reshape(xx.shape)
+    for mass, thresh in sorted(levels.items()):
+        contour_i = ax.contour(xx, yy, zz, levels=[thresh], linewidths=linewidths,
+                    linestyles=linestyles, colors=colors, alpha=alpha)
+        if clabel:
+            if inside_contour:
+                # data mass fraction (0-1) inside of each contour
+                if mass>=.999:
+                    fmt = {thresh: f"{mass:.3f}"}
+                elif mass>=.99:
+                    fmt = {thresh: f"{mass:.2f}"}
+                else:
+                    fmt = {thresh: f"{mass:.1f}"}
+            else:
+                # data mass fraction (0-1) outside of each contour
+                if mass>=.999:
+                    fmt = {thresh: f"{1-mass:.3f}"}
+                elif mass>=.99:
+                    fmt = {thresh: f"{1-mass:.2f}"}
+                else:
+                    fmt = {thresh: f"{1-mass:.1f}"}
+            # plt.clabel(contour_i, fmt=fmt, inline=True, fontsize=clabel_fontsize)
+            ax.clabel(contour_i, fmt=fmt, inline=True, fontsize=clabel_fontsize)
+
+    if plt_show:
+        plt.show()
+
+    if plt_close:
+        plt.close()
+
+    if verbose:
+        print(f"Done")
+
+    return contour_levels
