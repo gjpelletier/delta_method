@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.0.63"
+__version__ = "1.0.64"
 
 def delta_method(pcov,popt,x_new,f,x,y,alpha):
 
@@ -653,7 +653,7 @@ def quantile_contour(
     weights=None,
     bw_method=None,
     ax=None,
-    target_masses = [0.1, 0.5, 0.9, 0.99, 0.999],
+    target_quantiles = [0.1, 0.5, 0.9, 0.99, 0.999],
     grid_size=200, 
     inside=True,
     linewidths=1,
@@ -684,10 +684,10 @@ def quantile_contour(
         as only parameter and return a scalar. 
         If None (default), 'scott' is used. 
     - ax: matplotlib Axes object (optional). If None, uses current axes.
-    - target_masses: list of probabilistic target data density masses that are enclosed within each contour
-        For example, 10% of the data mass is contained within the KDE contour corresponding to target_masses=0.1
-        and 90% of the data mass is outside of the KDE contour correspondng to target_masses=0.1
-        (default target_masses=[0.1, 0.5, 0.9, 0.99, 0.999])
+    - target_quantiles: list of target data distribution quantiles that are enclosed within each contour
+        For example, 10% of the data distribution is contained within the KDE contour corresponding to target_quantiles=0.1
+        and 90% of the data is outside of the KDE contour correspondng to target_quantiles=0.1
+        (default target_quantiles=[0.1, 0.5, 0.9, 0.99, 0.999])
     - grid_size: number of evenly spaced grid points for the mesh in each dimension x and y 
     - inside: bool, whether the contour is labeled as the quantile of data inside or outside of the contour
     - linewidths: float, contour line widths if fill=False (default 1)
@@ -718,7 +718,7 @@ def quantile_contour(
     identifying core regions of biological or physical activity, and delineating anomalous or peripheral zones.     
     
     Returns:
-    - contour_levels: dict of KDE levels mapping probabilistic target_masses -> KDE thresholds
+    - contour_levels: dict of KDE levels mapping data distribution target_quantiles to KDE thresholds
     """
 
     import numpy as np
@@ -755,11 +755,11 @@ def quantile_contour(
         ax = plt.gca()
 
     # convert taret_masses to list if needed
-    if target_masses is not None and not isinstance(target_masses, list):
-        if isinstance(target_masses, np.ndarray):
-            target_masses = target_masses.tolist()
+    if target_quantiles is not None and not isinstance(target_quantiles, list):
+        if isinstance(target_quantiles, np.ndarray):
+            target_quantiles = target_quantiles.tolist()
         else:
-            target_masses = [target_masses]
+            target_quantiles = [target_quantiles]
 
     # Put x and y into a vstack array
     data = np.vstack([x, y])
@@ -792,7 +792,7 @@ def quantile_contour(
 
     # Calculate contour levels
     contour_levels = {}
-    for target in target_masses:
+    for target in target_quantiles:
         idx = np.searchsorted(cumulative_mass, target)
         if idx >= len(kde_vals_sorted):
             idx = len(kde_vals_sorted) - 1  # Clamp to max
