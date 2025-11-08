@@ -197,31 +197,24 @@ plt.show()
 ```
 <img width="3000" height="1800" alt="kdeplot_mocha_example" src="https://github.com/user-attachments/assets/59092744-8992-4062-8ed7-cd759b848776" />
 
-### Example 3: Bivariate scaled KDE contour plot
+### Example 3: Bivariate KDE and quantile contours
 
-In this example we use a dataset from seaborn to demonstrate a simple bivariate Kernel Density Estimate (KDE) plot. A bivariate KDE plot visualizes the joint probability density function of two continuous variables. While a scatterplot shows the individual locations of data points, a bivariate KDE plot focuses on the density of these points, providing a continuous representation of the data's distribution rather than just discrete points. 
+In this example we use a dataset from seaborn to demonstrate a bivariate Kernel Density Estimate (KDE) and quantile contours plot. A bivariate KDE plot visualizes the joint probability density function of two continuous variables. While a scatterplot shows the individual locations of data points, a bivariate KDE plot focuses on the density of these points, providing a continuous representation of the data's distribution rather than just discrete points. 
 
-The user has the option to plot either scaled (values between the min and max KDE are scaled to values between 0-1) or unscaled KDE values. We use scaled KDE values in this example, and we specify the levels for the contour lines of scaled KDE in this example. A scatter plot of the data points is also overlaid for comparison with the scaled KDE contours.
+In this example, we demonstrate the following functions:
 
+- **kde_contour** displays shades of blue indicating the bivariate KDE values
+- **quantile_contour** displays black contour lines labeled with the data quantiles that are enclosed within (e.g. 90% of the data are encloed within the 0.9 contour line).
 ```
 import seaborn as sns
 import matplotlib.pyplot as plt
-from delta_method import kde_contour
+from delta_method import kde_contour, quantile_contour
 
-iris = sns.load_dataset("iris")
 kde_contour(
     x=iris['sepal_width'],
     y=iris['sepal_length'],
-    scale_kde=True,
-    fill=True,
-    alpha=.5,
-    cmap='Blues',
-    lines=[.05, .10, .25, .5, .75, .9, .95],
-    lines_color='black',
-    clabel=True,
-    clabel_fontsize=8,
-    cbar=False,
 )
+iris = sns.load_dataset("iris")
 plt.scatter(
     x=iris['sepal_width'],
     y=iris['sepal_length'],
@@ -229,15 +222,19 @@ plt.scatter(
     s=5,
     label='data'
 )
+quantile_contour(
+    x=iris['sepal_width'],
+    y=iris['sepal_length'],
+)
 
 plt.legend(loc='upper left')
-plt.title('Scaled KDE contours (0-1) of iris sepal length vs. width')
+plt.title('Bivariate KDE and quantile contours\nof iris sepal length vs. width\n(e.g. 90% of the data are enclosed\nwithin the 0.9 contour line)')
 plt.xlabel('sepal_width')
 plt.ylabel('sepal_length')
 plt.savefig("kdeplot_iris_example.png", dpi=300)
 plt.show()
 ```
-<img width="1920" height="1440" alt="kdeplot_iris_example" src="https://github.com/user-attachments/assets/7150aa4b-6a8e-4b3c-b540-58001c8f4fd7" />
+<img width="1920" height="1440" alt="kdeplot_iris_example" src="https://github.com/user-attachments/assets/64e03117-aa86-4cfe-a621-101557210598" />
 
 # Acknowledgement
 
