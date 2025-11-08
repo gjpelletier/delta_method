@@ -234,7 +234,7 @@ plt.ylabel('sepal_length')
 plt.savefig("kdeplot_iris_example.png", dpi=300)
 plt.show()
 ```
-<img width="1920" height="1440" alt="kdeplot_iris_example" src="https://github.com/user-attachments/assets/64e03117-aa86-4cfe-a621-101557210598" />
+<img width="2400" height="1800" alt="kdeplot_iris_example" src="https://github.com/user-attachments/assets/4da8b553-2b32-428a-bab1-a76246755020" />
 
 # Acknowledgement
 
