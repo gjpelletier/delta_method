@@ -195,7 +195,7 @@ plt.tight_layout()
 plt.savefig("kdeplot_example.png", dpi=300)
 plt.show()
 ```
-<img width="3000" height="1800" alt="kdeplot_mocha_example" src="https://github.com/user-attachments/assets/59092744-8992-4062-8ed7-cd759b848776" />
+<img width="2400" height="1800" alt="kdeplot_iris_example" src="https://github.com/user-attachments/assets/bea285f7-1a79-4866-ba80-93df4c4542a5" />
 
 ### Example 3: Bivariate KDE and quantile contours
 
