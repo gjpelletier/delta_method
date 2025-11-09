@@ -119,12 +119,12 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from numpy import exp, linspace
-from delta_method import delta_method, kde_contour
+from delta_method import delta_method, kde_contour, quantile_contour
 
 # -----
 # ----- Read MOCHA seawater data from the csv available in this github repo ----
 # -----
-df = pd.read_csv('mocha_data.csv')
+df = pd.read_csv("mocha_data.csv")
 x=df['omega_ara']
 y=df['pH']
 
@@ -160,19 +160,15 @@ textstr = (
 )
 
 # -----
-# ----- Use kde_contour for bivariate KDE contour plot, and overlay it with the regression results ----
+# ----- Use kde_contour and quantile_contour, and overlay with the regression results ----
 # -----
 fig, ax = plt.subplots(figsize=(10, 6))
-contour = kde_contour(
-    x,
-    y,
-    ax=ax,
-    scale_kde=True,
-    threshold=0.001,
-    cmap='turbo',
-    grid_size=1000,
-    num_levels=21
-)
+
+# KDE values as filled contours in shades of blue with no lines
+kde = kde_contour(x, y, ax=ax)
+
+# Quantile contour lines in black with labels indicating the quantile enclosed within each line
+quantiles = quantile_contour(x, y, ax=ax)
 
 plt.plot(x_new, d['y_new'], color='red', label=f'Regression Best Fit')
 plt.plot(x_new, d['lwr_pred'], '--', color='red', label=f'95% Prediction Interval')
@@ -185,7 +181,7 @@ plt.text(0.05, 0.95, textstr, transform=plt.gca().transAxes,
          bbox=dict(boxstyle='round,pad=0.5', facecolor='white', edgecolor='gray', alpha=0.8))
 
 plt.legend(loc='lower right')
-plt.title('Bivariate KDE of Ωara vs. pH with nonlinear regression and 95% prediction intervals')
+plt.title('Bivariate KDE and data quantiles of Ωara vs. pH, Apr-Sep, 0-200m depth, 0-40km from coast\n(e.g. 90% of the observations are enclosed within the 0.9 contour)')
 plt.xlabel('x= Ωara', fontsize=12)
 plt.ylabel('y= pH (total)', fontsize=12)
 plt.xlim(np.nanmin(x), np.nanmax(x))
@@ -195,7 +191,7 @@ plt.tight_layout()
 plt.savefig("kdeplot_example.png", dpi=300)
 plt.show()
 ```
-<img width="2400" height="1800" alt="kdeplot_iris_example" src="https://github.com/user-attachments/assets/bea285f7-1a79-4866-ba80-93df4c4542a5" />
+<img width="3000" height="1800" alt="kdeplot_example" src="https://github.com/user-attachments/assets/4342ca9a-898b-422c-8cc6-cf5aa9450252" />
 
 ### Example 3: Bivariate KDE and quantile contours
 
