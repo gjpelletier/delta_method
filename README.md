@@ -116,7 +116,7 @@ The nonlinear regression best fit, 95% confidence intervals, and 95% prediction 
 
 The bivariate Kernel Density Estimates (KDE) are shown in shades of blue using the **kde_contour** function. The KDE values indicate the areas with the densest numbers of data points. 
 
-The bivariate data quantiles are shown in the black contour lines using the **quantile_contour** function. For example, 50% of the data are enclosed within the 0.5 contour, 90% of the data are enclosed within the 0.9 contour, 99% of the data are within the 0.99 contour, etc. 
+The bivariate data quantiles are shown in the black contour lines using the **quantile_contour** function. For example, 50% of the data are enclosed within the 0.5 contour, 90% of the data are within the 0.9 contour, 99% of the data are within the 0.99 contour, etc. 
 
 Comparing the quantile contours with the regression prediction intervals we see that 90-99% of the data points are within the 95% prediction intervals of the regression. The quantile contours are a big help for interpreting how well the regression fits the vast majority of the data.
 
@@ -206,7 +206,7 @@ In this example we use a dataset from seaborn to demonstrate a bivariate Kernel 
 In this example, we demonstrate the following functions:
 
 - **kde_contour** displays shades of blue indicating the bivariate KDE values
-- **quantile_contour** displays black contour lines labeled with the data quantiles that are enclosed within (e.g. 90% of the data are encloed within the 0.9 contour line).
+- **quantile_contour** displays black contour lines labeled with the data quantiles that are enclosed within (e.g. 90% of the data are enclosed within the 0.9 contour line).
 ```
 import seaborn as sns
 import matplotlib.pyplot as plt
