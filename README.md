@@ -1,4 +1,4 @@
-## Confidence and prediction intervals for nonlinear regression using the delta-method or parametric bootstrap, and bivariate KDE contour plots, for Python and Jupyter Notebook
+## Confidence and prediction intervals for nonlinear regression using the delta-method or parametric bootstrap, bivariate KDE contour plots, and bivariate quantile plots for Python and Jupyter Notebook
 
 by Greg Pelletier (gjpelletier@gmail.com)
 
@@ -108,11 +108,11 @@ The resulting confidence intervals and prediction intervals of the nonlinear reg
 
 <img width="1920" height="1440" alt="example_waiting_time_vs_eruption_length" src="https://github.com/user-attachments/assets/aec2ae7c-d7e1-4244-9c0a-8d5b014e8ba9" />
 
-### Example 2: Using kde_contour with delta_method to overlay nonlinear regression confidence and prediction intervals onto bivariate kernel density estimates
+### Example 2: Using kde_contour and quantile_contour with delta_method to overlay nonlinear regression confidence and prediction intervals
 
 In this example we analyze the relationship between pH and aragonite saturation (Ωara) in seawater using data from the Multistressor Observations of Coastal Hypoxia and Acidification (MOCHA) Synthesis dataset (https://www.ncei.noaa.gov/access/metadata/landing-page/bin/iso?id=gov.noaa.nodc:0277984). We use a subset of the MOCHA data collected along the US west coast during April-September in the upper 200 meters of the ocean within 40 km of the coast. 
 
-Kernel Density Estimates (KDE) are scaled to values between 0-1. Scaled KDE values below 0.001 are masked using a threshold value of 0.001.
+Bivariate Kernel Density Estimates (KDE) are shown in shades of blue using the kde_contour function. Bivariate data quantiles are shown as contour lines using quantile_contour (e.g. 90% of the data are enclosed within the 0.9 contour). 
 
 ```
 import pandas as pd
