@@ -112,7 +112,13 @@ The resulting confidence intervals and prediction intervals of the nonlinear reg
 
 In this example we analyze the relationship between pH and aragonite saturation (Ωara) in seawater using data from the Multistressor Observations of Coastal Hypoxia and Acidification (MOCHA) Synthesis dataset (https://www.ncei.noaa.gov/access/metadata/landing-page/bin/iso?id=gov.noaa.nodc:0277984). We use a subset of the MOCHA data collected along the US west coast during April-September in the upper 200 meters of the ocean within 40 km of the coast. 
 
-Bivariate Kernel Density Estimates (KDE) are shown in shades of blue using the kde_contour function. Bivariate data quantiles are shown as contour lines using quantile_contour (e.g. 90% of the data are enclosed within the 0.9 contour). 
+The nonlinear regression best fit, 95% confidence intervals, and 95% prediction intervals are shown in the red lines using the **delta_method** function
+
+The bivariate Kernel Density Estimates (KDE) are shown in shades of blue using the **kde_contour** function. The KDE values indicate the areas with the densest numbers of data points. 
+
+The bivariate data quantiles are shown in the black contour lines using the **quantile_contour** function. For example, 50% of the data are enclosed within the 0.5 contour, 90% of the data are enclosed within the 0.9 contour, 99% of the data are within the 0.99 contour, etc. 
+
+Comparing the quantile contours with the regression prediction intervals we see that 90-99% of the data points are within the 95% prediction intervals of the regression. The quantile contours are a big help for interpreting how well the regression fits the vast majority of the data.
 
 ```
 import pandas as pd
