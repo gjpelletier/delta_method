@@ -212,11 +212,18 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from delta_method import kde_contour, quantile_contour
 
+plt.figure(figsize=(8, 6))
+
+# load the iris data
+iris = sns.load_dataset("iris")
+
+# KDE contour plot as filled contours in shades of blue
 kde_contour(
     x=iris['sepal_width'],
     y=iris['sepal_length'],
 )
-iris = sns.load_dataset("iris")
+
+# scatter plot of sepal length vs width
 plt.scatter(
     x=iris['sepal_width'],
     y=iris['sepal_length'],
@@ -224,15 +231,17 @@ plt.scatter(
     s=5,
     label='data'
 )
+
+# Quantile contour plot as black lines labeled with the data quantiles enclosed within each contour line
 quantile_contour(
     x=iris['sepal_width'],
     y=iris['sepal_length'],
 )
 
 plt.legend(loc='upper left')
-plt.title('Bivariate KDE and quantile contours\nof iris sepal length vs. width\n(e.g. 90% of the data are enclosed\nwithin the 0.9 contour line)')
-plt.xlabel('sepal_width')
-plt.ylabel('sepal_length')
+plt.title('Bivariate KDE and quantile contours of iris sepal length vs. width\n(e.g. 90% of the data are enclosed within the 0.9 contour line)')
+plt.xlabel('sepal width')
+plt.ylabel('sepal length')
 plt.savefig("kdeplot_iris_example.png", dpi=300)
 plt.show()
 ```
