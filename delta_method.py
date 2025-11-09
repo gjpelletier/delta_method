@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.0.64"
+__version__ = "1.0.65"
 
 def delta_method(pcov,popt,x_new,f,x,y,alpha):
 
@@ -579,7 +579,7 @@ def kde_contour(
         # filled contourf withot or with contour lines added
         contour = ax.contourf(xx, yy, z_masked, 
             levels=levels, colors=color, cmap=cmap, alpha=alpha, 
-            linewidths=0, linestyles=None, antialiased=antialiased, **kwargs)
+            linestyles=None, antialiased=antialiased, **kwargs)
         if lines is not None:
             # Add contour lines to the contourf
             if lines_color is None:
