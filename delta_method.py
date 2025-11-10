@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.0.65"
+__version__ = "1.0.66"
 
 def delta_method(pcov,popt,x_new,f,x,y,alpha):
 
@@ -808,9 +808,12 @@ def quantile_contour(
     xx = mesh[0]
     yy = mesh[1]
     zz = kde_vals.copy().reshape(xx.shape)
+    contour = []    # initialize list of contour handles
     for mass, thresh in sorted(contour_levels.items()):
         contour_i = ax.contour(xx, yy, zz, levels=[thresh], linewidths=linewidths,
                     linestyles=linestyles, colors=colors, alpha=alpha)
+        contour.append(contour_i)  # Append the contour handle to the list
+
         if clabel:
             if inside:
                 # data mass fraction (0-1) inside of each contour
@@ -840,4 +843,4 @@ def quantile_contour(
     if verbose:
         print(f"Done")
 
-    return contour_levels
+    return contour
