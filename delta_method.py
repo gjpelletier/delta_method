@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.0.68"
+__version__ = "1.0.69"
 
 def delta_method(pcov,popt,x_new,f,x,y,alpha):
 
@@ -917,6 +917,20 @@ def check_quantile_contour(
     identifying core regions of biological or physical activity, and delineating anomalous or peripheral zones.     
     
     Returns:
+    -result dictionary containing the following:
+        'x': x,
+        'y': y,
+        'target_quantiles': target_quantiles,
+        'contours': list contours for each target quantile,
+        'contour_paths': list of contour_paths,
+        'contour_is_closed': list of boolean whether contour is closed,
+        'inside_masks': list of inside_masks for data enclosed by contour,
+        'outside_masks': list of outside_masks for data outside of contour,
+        'inside_counts': list of inside_counts of numbers of data inside,
+        'outside_counts': list of outside_counts of numbers of data inside,
+        'inside_fractions': list of inside_fractions of data inside contour,
+        'outside_fractions': list of outside_fractios of data outside contour,
+        
     - display output plot of the results for each quantile in target_quantiles
         including the followingff:
         - target qwuamtile
@@ -928,6 +942,7 @@ def check_quantile_contour(
     """
 
     import numpy as np
+    import matplotlib.pyplot as plt
     from delta_method import quantile_contour
     
     print('Checking percent of data samples inside and outside of target quantile contours ...')
@@ -939,9 +954,15 @@ def check_quantile_contour(
         else:
             target_quantiles = [target_quantiles]
 
+    contours = []
+    contour_paths = []
+    contour_is_closed = []
+    inside_masks = []
+    outside_masks = []
+    inside_counts = []
+    outside_counts = []
     inside_fractions = []
     outside_fractions = []
-    # bw_values = []
 
     # def closest_index(lst, target):
     #     return min(range(len(lst)), key=lambda i: abs(lst[i] - target))
@@ -985,6 +1006,15 @@ def check_quantile_contour(
         outside_count = np.sum(outside_mask)
         inside_fraction = inside_count/x.shape[0]
         outside_fraction = outside_count/x.shape[0]
+
+        # append to output lists
+        contours.append(contour) 
+        contour_paths.append(contour_path) 
+        contour_is_closed.append(closed) 
+        inside_masks.append(inside_mask) 
+        outside_masks.append(outside_mask) 
+        inside_counts.append(inside_count) 
+        outside_counts.append(outside_count) 
         inside_fractions.append(inside_fraction) 
         outside_fractions.append(outside_fraction) 
 
@@ -997,5 +1027,22 @@ def check_quantile_contour(
         plt.ylabel('y')
 
         plt.show()
-
+        
+    result = {
+        'x': x,
+        'y': y,
+        'target_quantiles': target_quantiles,
+        'contours': contours,
+        'contour_paths': contour_paths,
+        'contour_is_closed': closed,
+        'inside_masks': inside_masks,
+        'outside_masks': outside_masks,
+        'inside_counts': inside_counts,
+        'outside_counts': outside_counts,
+        'inside_fractions': inside_fractions,
+        'outside_fractions': outside_fractions,
+        }
+        
+    return result
+  
 
