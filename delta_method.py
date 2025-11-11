@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.0.66"
+__version__ = "1.0.67"
 
 def delta_method(pcov,popt,x_new,f,x,y,alpha):
 
@@ -754,7 +754,7 @@ def quantile_contour(
     if ax is None:
         ax = plt.gca()
 
-    # convert taret_masses to list if needed
+    # convert taret_quantiles to list if needed
     if target_quantiles is not None and not isinstance(target_quantiles, list):
         if isinstance(target_quantiles, np.ndarray):
             target_quantiles = target_quantiles.tolist()
@@ -844,3 +844,155 @@ def quantile_contour(
         print(f"Done")
 
     return contour
+
+def check_quantile_contour(
+    x, y,
+    weights=None,
+    bw_method=None,
+    ax=None,
+    target_quantiles = [0.1, 0.5, 0.9, 0.99, 0.999],
+    grid_size=200, 
+    inside=True,
+    linewidths=1,
+    linestyles='solid',
+    colors='black',
+    alpha=1,
+    clabel=False,
+    clabel_fontsize=8,
+    plt_show=False,
+    plt_close=False,
+    verbose=False
+    ):
+
+    """
+    Check quantile contours of bivariate data derived from 
+    Gaussian KDE thresholds integrated to enclose specified density mass
+    compared with perecent of data samples inside and outside of contours
+
+        Args:
+    - x, y: 1D arrays of data points
+    - weights: 1D array, optional, same size/shape as x and y data
+        weights of datapoints for use with scipy.stats.guassian_kde. 
+        This must be the same shape as dataset x and y. 
+        If None (default), the samples are assumed to be equally weighted
+    - bw_method: str, scalar or callable, optional, for use with scipy.stats.guassian_kde
+        The method used to calculate the bandwidth factor. 
+        This can be 'scott', 'silverman', a scalar constant or a callable. 
+        If a scalar, this will be used directly as factor. 
+        If a callable, it should take a gaussian_kde instance 
+        as only parameter and return a scalar. 
+        If None (default), 'scott' is used. 
+    - ax: matplotlib Axes object (optional). If None, uses current axes.
+    - target_quantiles: list of target data distribution quantiles that are enclosed within each contour
+        For example, 10% of the data distribution is contained within the KDE contour corresponding to target_quantiles=0.1
+        and 90% of the data is outside of the KDE contour correspondng to target_quantiles=0.1
+        (default target_quantiles=[0.1, 0.5, 0.9, 0.99, 0.999])
+    - grid_size: number of evenly spaced grid points for the mesh in each dimension x and y 
+    - inside: bool, whether the contour is labeled as the quantile of data inside or outside of the contour
+    - linewidths: float, contour line widths if fill=False (default 1)
+    - linestyles: contour line style if fill=False  
+        'solid' (default) 'dashed', 'dashdot', 'dotted'
+    - colors: colors of the contour lines (default 'black')
+    - clabel: bool, whether to add labels to contour lines, used if fill=False
+    - clabel_fontsize: float, font size for contour line labels (default 8),
+    - clabel_fmt: string format of contour line labels (default '%.2f')
+    - plt_show: bool, whether to show the plot (default False)
+    - plt_close: bool, whether to close the plot to suppress showing the plot (default False)
+    - verbose: bool, whether to provide descriptive diagnostic outputs during execution 
+             
+    Method description:
+
+    To identify regions of high data concentration in multivariate space, we applied a grid-based KDE using a 
+    Gaussian kernel with bandwidth selected via Scott's rule (default). The KDE was evaluated over a uniform grid 
+    spanning the data domain, and the resulting density values were sorted in descending order. 
+    We then computed the cumulative density mass by integrating over grid cells, scaling the cumulative sum to unity. 
+    For each target mass (e.g., 0.05, 0.10, 0.25, …), we identified the KDE threshold corresponding 
+    to the smallest density value that enclosed the desired proportion of total mass. 
+    This threshold defines a contour level whose enclosed area contains the specified fraction of the data density, 
+    while the area outside the contour corresponds to the complementary fraction. 
+    
+    This approach aligns with a quantile matching strategy, where each contour level acts as a probabilistic boundary: 
+    for example, the 0.90 contour encloses approximately 90% of the data density, leaving 10% outside. 
+    Such contours are particularly useful for interpreting spatial distributions of oceanographic variables, 
+    identifying core regions of biological or physical activity, and delineating anomalous or peripheral zones.     
+    
+    Returns:
+    - display output plot of the results for each quantile in target_quantiles
+        including the followingff:
+        - target qwuamtile
+        - total number of samples
+        - boolean whether the contour polygon is closed
+        - number and percentage of samples inside of contour
+        - number and percentage of samples outside of contour
+        - scatter plot with color-coded samples inside and outside of contour
+    """
+
+    print('Checking percent of data samples inside and outside of target quantile contours ...')
+
+    # convert taret_quantiles to list if needed
+    if target_quantiles is not None and not isinstance(target_quantiles, list):
+        if isinstance(target_quantiles, np.ndarray):
+            target_quantiles = target_quantiles.tolist()
+        else:
+            target_quantiles = [target_quantiles]
+
+    inside_fractions = []
+    outside_fractions = []
+    # bw_values = []
+
+    def closest_index(lst, target):
+        return min(range(len(lst)), key=lambda i: abs(lst[i] - target))
+
+    for i in range(len(target_quantiles)):
+
+        # # test value for bw
+        # bw = 1-target_quantiles[i]
+        # bw_values.append(bw)
+
+        # Find the contour for scaled KDE=0.1
+        contour = quantile_contour(x,y, 
+            weights=weights,
+            bw_method=bw_method,
+            ax=ax,
+            target_quantiles=target_quantiles[i],
+            grid_size=grid_size, 
+            inside=inside,
+            linewidths=linewidths,
+            linestyles=linestyles,
+            colors=colors,
+            alpha=alpha,
+            clabel=clabel,
+            clabel_fontsize=clabel_fontsize,
+            plt_show=plt_show,
+            plt_close=plt_close,
+            verbose=verbose
+            )
+
+        # bool, whether the contour polygon is closed (True if the contour is a closed polygon)
+        closed = np.array_equal(contour[0].allsegs[0][0][0], contour[0].allsegs[0][0][-1])  # Compare start and end points
+
+        # Check which points are outside the contour
+        points = np.column_stack((x, y))
+        contour_path = contour[0].get_paths()
+        inside_mask = contour_path[0].contains_points(points)
+        outside_mask = ~contour_path[0].contains_points(points)
+
+        # Count points outside the contour
+        inside_count = np.sum(inside_mask)
+        outside_count = np.sum(outside_mask)
+        inside_fraction = inside_count/x.shape[0]
+        outside_fraction = outside_count/x.shape[0]
+        inside_fractions.append(inside_fraction) 
+        outside_fractions.append(outside_fraction) 
+
+        # Visualize points outside of the target contour level
+        plt.scatter(x[inside_mask], y[inside_mask], s=5, color='red', label=f'Inside, n={inside_count} ({100*inside_fraction:.2f}% of data)')
+        plt.scatter(x[outside_mask], y[outside_mask], s=5, color='blue', label=f'Outside, n={outside_count} ({100*outside_fraction:.2f}% of data)')
+        plt.legend()
+        plt.title(f'Target quantile: {target_quantiles[i]}, total n:{x.shape[0]}, closed:{closed}')
+        plt.xlabel('x')
+        plt.ylabel('y')
+
+        plt.show()
+
+
