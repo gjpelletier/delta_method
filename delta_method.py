@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.0.67"
+__version__ = "1.0.68"
 
 def delta_method(pcov,popt,x_new,f,x,y,alpha):
 
@@ -927,6 +927,9 @@ def check_quantile_contour(
         - scatter plot with color-coded samples inside and outside of contour
     """
 
+    import numpy as np
+    from delta_method import quantile_contour
+    
     print('Checking percent of data samples inside and outside of target quantile contours ...')
 
     # convert taret_quantiles to list if needed
@@ -940,8 +943,8 @@ def check_quantile_contour(
     outside_fractions = []
     # bw_values = []
 
-    def closest_index(lst, target):
-        return min(range(len(lst)), key=lambda i: abs(lst[i] - target))
+    # def closest_index(lst, target):
+    #     return min(range(len(lst)), key=lambda i: abs(lst[i] - target))
 
     for i in range(len(target_quantiles)):
 
