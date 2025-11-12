@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__version__ = "1.0.69"
+__version__ = "1.0.71"
 
 def delta_method(pcov,popt,x_new,f,x,y,alpha):
 
@@ -664,7 +664,8 @@ def quantile_contour(
     clabel_fontsize=8,
     plt_show=False,
     plt_close=False,
-    verbose=False
+    verbose=False,
+    use_sample_fraction=False  
     ):
 
     """
@@ -699,6 +700,7 @@ def quantile_contour(
     - clabel_fmt: string format of contour line labels (default '%.2f')
     - plt_show: bool, whether to show the plot (default False)
     - plt_close: bool, whether to close the plot to suppress showing the plot (default False)
+    - use_sample_fraction: bool, whether to use the actual sample fraction or the integrated kde density data mass
     - verbose: bool, whether to provide descriptive diagnostic outputs during execution 
             
     Method description:
@@ -728,7 +730,6 @@ def quantile_contour(
     if verbose:
         print(f"Starting quantile_contour ...")
 
-    # Convert inputs to 1D arrays and remove NaNs
     x = np.asarray(x).ravel()
     y = np.asarray(y).ravel()
 
@@ -754,69 +755,71 @@ def quantile_contour(
     if ax is None:
         ax = plt.gca()
 
-    # convert taret_quantiles to list if needed
     if target_quantiles is not None and not isinstance(target_quantiles, list):
         if isinstance(target_quantiles, np.ndarray):
             target_quantiles = target_quantiles.tolist()
         else:
             target_quantiles = [target_quantiles]
 
-    # Put x and y into a vstack array
     data = np.vstack([x, y])
 
     if verbose:
         print(f"Finding bivariate KDE values for x,y ...")
 
-    # Find KDE values for x, y data
     kde = gaussian_kde(data, bw_method=bw_method, weights=weights)
 
-    # Grid setup
     mins = data.min(axis=1)
     maxs = data.max(axis=1)    
     grid_axes = [np.linspace(mins[d], maxs[d], grid_size) for d in range(data.shape[0])]
     mesh = np.meshgrid(*grid_axes)
     grid_points = np.vstack([m.ravel() for m in mesh])
 
-    # KDE evaluation
     kde_vals = kde(grid_points)
     cell_area = np.prod([(maxs[d] - mins[d]) / grid_size for d in range(data.shape[0])])
     kde_vals_sorted = np.sort(kde_vals)[::-1]
 
-    # Cumulative mass and normalization
-    cumulative_mass = np.cumsum(kde_vals_sorted) * cell_area
-    total_mass = cumulative_mass[-1]
-    cumulative_mass /= total_mass  # Normalize to [0, 1]
-
-    if verbose:
-        print(f"Integrating target data mass quantiles at threshold KDE levels ...")
-
-    # Calculate contour levels
-    contour_levels = {}
-    for target in target_quantiles:
-        idx = np.searchsorted(cumulative_mass, target)
-        if idx >= len(kde_vals_sorted):
-            idx = len(kde_vals_sorted) - 1  # Clamp to max
-        threshold = kde_vals_sorted[idx]
-        contour_levels[target] = threshold
+    if use_sample_fraction:
         if verbose:
-            print(f"Target mass {target:.3f} → KDE threshold {threshold:.4e}")
+            print("Using sample-based KDE thresholds ...")
+        sample_kde_vals = kde(data)
+        sample_kde_sorted = np.sort(sample_kde_vals)[::-1]
+        contour_levels = {}
+        for target in target_quantiles:
+            idx = int(np.floor(target * len(sample_kde_sorted)))
+            idx = min(idx, len(sample_kde_sorted) - 1)
+            threshold = sample_kde_sorted[idx]
+            contour_levels[target] = threshold
+            if verbose:
+                print(f"Target sample fraction {target:.3f} → KDE threshold {threshold:.4e}")
+    else:
+        if verbose:
+            print("Using integrated KDE mass thresholds ...")
+        cumulative_mass = np.cumsum(kde_vals_sorted) * cell_area
+        total_mass = cumulative_mass[-1]
+        cumulative_mass /= total_mass
+        contour_levels = {}
+        for target in target_quantiles:
+            idx = np.searchsorted(cumulative_mass, target)
+            idx = min(idx, len(kde_vals_sorted) - 1)
+            threshold = kde_vals_sorted[idx]
+            contour_levels[target] = threshold
+            if verbose:
+                print(f"Target mass {target:.3f} → KDE threshold {threshold:.4e}")
 
     if verbose:
         print(f"Plotting ...")
 
-    # plot the probabilistic target_mass contours
     xx = mesh[0]
     yy = mesh[1]
     zz = kde_vals.copy().reshape(xx.shape)
-    contour = []    # initialize list of contour handles
+    contour = []
     for mass, thresh in sorted(contour_levels.items()):
         contour_i = ax.contour(xx, yy, zz, levels=[thresh], linewidths=linewidths,
                     linestyles=linestyles, colors=colors, alpha=alpha)
-        contour.append(contour_i)  # Append the contour handle to the list
+        contour.append(contour_i)
 
         if clabel:
             if inside:
-                # data mass fraction (0-1) inside of each contour
                 if mass>=.999:
                     fmt = {thresh: f"{mass:.3f}"}
                 elif mass>=.99:
@@ -824,14 +827,12 @@ def quantile_contour(
                 else:
                     fmt = {thresh: f"{mass:.1f}"}
             else:
-                # data mass fraction (0-1) outside of each contour
                 if mass>=.999:
                     fmt = {thresh: f"{1-mass:.3f}"}
                 elif mass>=.99:
                     fmt = {thresh: f"{1-mass:.2f}"}
                 else:
                     fmt = {thresh: f"{1-mass:.1f}"}
-            # plt.clabel(contour_i, fmt=fmt, inline=True, fontsize=clabel_fontsize)
             ax.clabel(contour_i, fmt=fmt, inline=True, fontsize=clabel_fontsize)
 
     if plt_show:
@@ -861,7 +862,8 @@ def check_quantile_contour(
     clabel_fontsize=8,
     plt_show=False,
     plt_close=False,
-    verbose=False
+    verbose=False,
+    use_sample_fraction=False
     ):
 
     """
@@ -898,6 +900,7 @@ def check_quantile_contour(
     - clabel_fmt: string format of contour line labels (default '%.2f')
     - plt_show: bool, whether to show the plot (default False)
     - plt_close: bool, whether to close the plot to suppress showing the plot (default False)
+    - use_sample_fraction: bool, whether to use the actual sample fraction or the integrated kde density data mass
     - verbose: bool, whether to provide descriptive diagnostic outputs during execution 
              
     Method description:
@@ -989,6 +992,7 @@ def check_quantile_contour(
             clabel_fontsize=clabel_fontsize,
             plt_show=plt_show,
             plt_close=plt_close,
+            use_sample_fraction=use_sample_fraction,
             verbose=verbose
             )
 
@@ -1022,7 +1026,7 @@ def check_quantile_contour(
         plt.scatter(x[inside_mask], y[inside_mask], s=5, color='red', label=f'Inside, n={inside_count} ({100*inside_fraction:.2f}% of data)')
         plt.scatter(x[outside_mask], y[outside_mask], s=5, color='blue', label=f'Outside, n={outside_count} ({100*outside_fraction:.2f}% of data)')
         plt.legend()
-        plt.title(f'Target quantile: {target_quantiles[i]}, total n:{x.shape[0]}, closed:{closed}')
+        plt.title(f'Target quantile: {target_quantiles[i]}, total n: {x.shape[0]}, closed: {closed}')
         plt.xlabel('x')
         plt.ylabel('y')
 
@@ -1044,5 +1048,4 @@ def check_quantile_contour(
         }
         
     return result
-  
-
+ 
